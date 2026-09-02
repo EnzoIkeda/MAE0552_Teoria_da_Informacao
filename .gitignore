@@ -1,0 +1,23 @@
+# Ambiente Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Artefatos gerados pelas simulacoes
+**/dados/*
+!**/dados/.gitkeep
+**/figuras/*
+!**/figuras/.gitkeep
+*.npy
+*.npz
+*.parquet
+
+# Sistema / editores
+.DS_Store
+.idea/
+.vscode/
