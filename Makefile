@@ -1,10 +1,8 @@
-# PYTHON: interpretador base para criar o venv (Ubuntu nao tem `python`, so `python3`).
-# Sobrescreva se precisar: make setup PYTHON=python3.12
-VENV   ?= .venv
+# Atalhos para Linux/macOS. Cada alvo delega para scripts/dev.py (mesma logica
+# usada no Windows). PYTHON = interpretador base p/ criar o venv no `setup`
+# (Ubuntu nao tem `python`, so `python3`); sobrescreva com: make setup PYTHON=python3.12
 PYTHON ?= python3
-PY   := $(VENV)/bin/python
-PIP  := $(VENV)/bin/pip
-BIN  := $(VENV)/bin
+DEV    := $(PYTHON) scripts/dev.py
 
 .PHONY: help setup test test-notebooks lint format check lab clean
 
@@ -12,34 +10,26 @@ help:  ## Lista os alvos disponiveis
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) \
 		| awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
 
-setup:  ## Cria o venv e instala tudo (runtime + dev + pacote editavel + hooks)
-	$(PYTHON) -m venv $(VENV)
-	$(PIP) install --upgrade pip
-	$(PIP) install -r requirements.txt
-	$(PIP) install -e .
-	$(BIN)/pre-commit install --hook-type pre-commit --hook-type pre-push
+setup:  ## Cria o venv, instala tudo (runtime + dev + pacote editavel) e ativa os hooks
+	$(DEV) setup
 
 test:  ## Roda os testes de utils/
-	$(PY) -m pytest
+	$(DEV) test
 
 test-notebooks:  ## Executa os notebooks (nbmake) e falha se algum quebrar
-	$(PY) -m pytest --nbmake projetos/
+	$(DEV) test-notebooks
 
 lint:  ## Verifica estilo e erros com ruff (sem alterar arquivos)
-	$(BIN)/ruff check .
-	$(BIN)/ruff format --check .
+	$(DEV) lint
 
 format:  ## Formata e corrige o que der com ruff
-	$(BIN)/ruff format .
-	$(BIN)/ruff check --fix .
+	$(DEV) format
 
-check: lint test  ## O que o CI cobra: lint + testes
+check:  ## O que o CI cobra: lint + testes
+	$(DEV) check
 
 lab:  ## Abre o JupyterLab
-	$(BIN)/jupyter lab
+	$(DEV) lab
 
 clean:  ## Remove caches e artefatos locais
-	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
-	find . -type d -name .ipynb_checkpoints -exec rm -rf {} + 2>/dev/null || true
-	find . -type d -name .pytest_cache -exec rm -rf {} + 2>/dev/null || true
-	rm -rf ./*.egg-info
+	$(DEV) clean
