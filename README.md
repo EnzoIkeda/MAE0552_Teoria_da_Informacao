@@ -41,6 +41,7 @@ em `pyproject.toml`):
 | `numpy` | >= 1.24 | arrays, gerador aleatório, álgebra vetorial — base de tudo |
 | `scipy` | >= 1.10 | conferências independentes (`scipy.stats`: `chi2`, `binom`, ...) |
 | `matplotlib` | >= 3.6 | gráficos dos relatórios |
+| `seaborn` | >= 0.13 | camada de alto nível dos gráficos (curvas com IC, heatmaps, barras) |
 | `pandas` | >= 2.0 | organizar resultados de muitas repetições (DataFrame) |
 | `jupyterlab` | >= 4.0 | ambiente dos notebooks |
 | `ipykernel` | >= 6.29 | kernel dos notebooks (usado também pelo `nbmake` no CI) |
@@ -61,7 +62,7 @@ Instalação em **Para começar a trabalhar**.
 │   ├── info_theory.py         #   entropia, conjunta/condicional, cruzada, KL, I(X;Y) (na mão)
 │   ├── simulation.py          #   amostragem de pmf, canal BSC, cadeias de Markov
 │   ├── estimation.py          #   bootstrap: estimativa + intervalo de confiança
-│   └── plotting.py            #   estilo padrão dos gráficos e salvamento de figuras
+│   └── plotting.py            #   estilo padrão, gráficos seaborn e tabelas dos relatórios
 ├── tests/                     # testes de sanidade do utils/
 ├── scripts/dev.py             # comandos de desenvolvimento multiplataforma
 ├── Makefile                   # atalhos (Linux/macOS) que chamam scripts/dev.py
