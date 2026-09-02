@@ -1,4 +1,7 @@
-VENV ?= .venv
+# PYTHON: interpretador base para criar o venv (Ubuntu nao tem `python`, so `python3`).
+# Sobrescreva se precisar: make setup PYTHON=python3.12
+VENV   ?= .venv
+PYTHON ?= python3
 PY   := $(VENV)/bin/python
 PIP  := $(VENV)/bin/pip
 BIN  := $(VENV)/bin
@@ -10,7 +13,7 @@ help:  ## Lista os alvos disponiveis
 		| awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
 
 setup:  ## Cria o venv e instala tudo (runtime + dev + pacote editavel + hooks)
-	python -m venv $(VENV)
+	$(PYTHON) -m venv $(VENV)
 	$(PIP) install --upgrade pip
 	$(PIP) install -r requirements.txt
 	$(PIP) install -e .
