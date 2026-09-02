@@ -9,24 +9,27 @@ compartilham é o ferramental de teoria da informação em `utils/`.
 
 Desenvolvimento sempre em **Python + Jupyter Notebook**.
 
-## Atalhos (Makefile)
+## Atalhos
 
-Depois do `make setup` (ver **Para começar a trabalhar**), o dia a dia roda por
-`make` — em Linux/macOS:
+Os mesmos comandos em qualquer sistema operacional. Em **Linux/macOS** use
+`make <alvo>`; em **Windows** (ou onde não houver `make`) use
+`python scripts\dev.py <alvo>`. As duas formas rodam exatamente a mesma coisa.
 
-| Comando | O que faz |
-|---------|-----------|
-| `make setup` | cria o `.venv`, instala tudo e ativa os hooks |
-| `make test` | roda os testes de `utils/` (`pytest`) |
-| `make test-notebooks` | executa todos os notebooks e falha se algum quebrar (`nbmake`) |
-| `make lint` | `ruff check` + `ruff format --check` (não altera arquivos) |
-| `make format` | formata e corrige o que der com `ruff` |
-| `make check` | `lint` + `test` (o mesmo que o CI cobra) |
-| `make lab` | abre o JupyterLab |
-| `make clean` | remove caches (`__pycache__`, `.pytest_cache`, checkpoints, `*.egg-info`) |
+| `make …` | `python scripts/dev.py …` | O que faz |
+|----------|---------------------------|-----------|
+| `make setup` | `... setup` | cria o `.venv`, instala tudo e ativa os hooks |
+| `make test` | `... test` | roda os testes de `utils/` (`pytest`) |
+| `make test-notebooks` | `... test-notebooks` | executa todos os notebooks e falha se algum quebrar (`nbmake`) |
+| `make lint` | `... lint` | `ruff check` + `ruff format --check` (não altera arquivos) |
+| `make format` | `... format` | formata e corrige o que der com `ruff` |
+| `make check` | `... check` | `lint` + `test` (o mesmo que o CI cobra) |
+| `make lab` | `... lab` | abre o JupyterLab |
+| `make clean` | `... clean` | remove caches (`__pycache__`, `.pytest_cache`, checkpoints, `*.egg-info`) |
 
-`make` usa `python3` para criar o `.venv`. Em outra máquina, dá para apontar o
-interpretador: `make setup PYTHON=python3.12`.
+Rode o `setup` com o Python do sistema (`python3` no Linux/macOS, `python` no
+Windows); os demais alvos usam o Python do `.venv` automaticamente. Para escolher
+o interpretador do venv: `make setup PYTHON=python3.12` ou
+`py -3.12 scripts\dev.py setup`.
 
 ## Dependências
 
@@ -60,9 +63,9 @@ Instalação em **Para começar a trabalhar**.
 │   ├── estimation.py          #   bootstrap: estimativa + intervalo de confiança
 │   └── plotting.py            #   estilo padrão dos gráficos e salvamento de figuras
 ├── tests/                     # testes de sanidade do utils/
-├── scripts/                   # utilitários do repo (ex.: hook que barra push na main)
-├── Makefile                   # atalhos: make setup / test / test-notebooks / lint / lab
-├── .pre-commit-config.yaml    # hooks: nbstripout, ruff, bloqueio de push na main
+├── scripts/dev.py             # comandos de desenvolvimento multiplataforma
+├── Makefile                   # atalhos (Linux/macOS) que chamam scripts/dev.py
+├── .pre-commit-config.yaml    # hooks: nbstripout, ruff, sem commit direto na main
 ├── .github/workflows/ci.yml   # CI: lint + testes + execução dos notebooks
 └── projetos/
     ├── _template/             # esqueleto para começar uma proposta nova
@@ -93,27 +96,45 @@ Uma vez por máquina (clonar e preparar o ambiente):
 ```bash
 git clone <url-do-repositorio>
 cd MAE0552_Teoria_da_Informacao
-
-python3 -m venv .venv
-source .venv/bin/activate           # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-pip install -e .                    # deixa `import utils...` disponível em qualquer notebook
-pre-commit install --hook-type pre-commit --hook-type pre-push   # ativa os hooks
 ```
 
-Em Linux/macOS, `make setup` faz tudo isso de uma vez (cria o `.venv`, instala e
-ativa os hooks).
+Depois, **um único comando** cria o `.venv`, instala tudo e ativa os hooks:
+
+| Sistema | Comando |
+|---------|---------|
+| Linux/macOS | `make setup` |
+| Windows | `python scripts\dev.py setup` |
+| Qualquer (sem `make`) | `python3 scripts/dev.py setup` |
+
+<details>
+<summary>Passo a passo manual (se preferir não usar o script)</summary>
+
+```bash
+# 1) criar e ativar o ambiente virtual
+python3 -m venv .venv                 # Windows: py -3 -m venv .venv
+source .venv/bin/activate             # bash/zsh (Linux/macOS)
+# .venv\Scripts\Activate.ps1          # PowerShell (Windows)
+# .venv\Scripts\activate.bat          # cmd.exe (Windows)
+
+# 2) instalar dependências + o pacote utils + os hooks de commit
+pip install -r requirements.txt
+pip install -e .
+pre-commit install
+```
+</details>
 
 > Ubuntu/Debian: se `python3 -m venv` reclamar de `ensurepip`, instale o pacote
 > do venv — `sudo apt install python3-venv` — e rode de novo.
+> Windows: instale o Python de python.org (marque "Add python.exe to PATH") ou
+> pela Microsoft Store; use `python` / `py -3`, não `python3`.
 
-No começo de cada sessão de trabalho:
+No começo de cada sessão de trabalho (ative o `.venv` conforme o seu shell):
 
 ```bash
-source .venv/bin/activate
-git switch main && git pull         # traz o que os colegas subiram
-git switch -c minha-tarefa          # trabalha sempre em um branch, nunca direto na main
-jupyter lab
+source .venv/bin/activate            # Windows: .venv\Scripts\Activate.ps1
+git switch main && git pull          # traz o que os colegas subiram
+git switch -c minha-tarefa           # trabalha sempre em um branch, nunca direto na main
+jupyter lab                          # ou: make lab
 ```
 
 Ao terminar um trecho de trabalho: `git add` / `git commit` / `git push`
@@ -220,31 +241,27 @@ pelo `.gitignore` — não precisam entrar nos commits.
 - **`ruff`** cuida de lint e formatação de `utils/`, `tests/` e `src/`
   (configuração em `pyproject.toml`; notebooks e `.md` ficam de fora). Rode
   `make format` antes de commitar, ou deixe o `pre-commit` fazer.
-- **`pre-commit`** roda a cada `git commit` (depois de `pre-commit install`):
-  `nbstripout` limpa a saída das células dos notebooks — evita diffs enormes e
-  conflitos de merge —, e `ruff` corrige/formata o código. Se um hook alterar
-  arquivos, o commit é abortado: revise, dê `git add` de novo e recomite.
+- **`pre-commit`** roda a cada `git commit` (depois de `pre-commit install`, feito
+  pelo `setup`): `nbstripout` limpa a saída das células dos notebooks — evita
+  diffs enormes e conflitos de merge —, e `ruff` corrige/formata o código. Se um
+  hook alterar arquivos, o commit é abortado: revise, dê `git add` de novo e
+  recomite. Todos os hooks são multiplataforma (Windows/Linux/macOS).
 - `.editorconfig` mantém indentação e fim de linha consistentes entre editores.
 
 ### Proteção da `main`
 
-Todo trabalho entra na `main` por **Pull Request**, nunca por push direto.
+Todo trabalho entra na `main` por **Pull Request**, nunca por commit direto.
 
-Um hook `pre-push` (`scripts/no-push-to-main.sh`, registrado no
-`.pre-commit-config.yaml`) recusa `git push` que atualize a `main` diretamente.
-Ele é **local**: só vale para quem instalou o hook —
+O hook `no-commit-to-branch` (em `.pre-commit-config.yaml`) recusa `git commit`
+feito com a `main` em checkout — força criar um branch antes. É **local**: só
+vale para quem rodou o `setup`/`pre-commit install`, e pode ser contornado com
+`git commit --no-verify` numa emergência.
 
-```bash
-pre-commit install --hook-type pre-push     # incluído no `make setup`
-```
-
-— e pode ser contornado com `git push --no-verify` numa emergência.
-
-> Proteção real no servidor (bloquear o merge sem PR para todos) depende de
-> `Settings → Branches`/`Rules` no GitHub, que exige repositório **público** ou
-> plano **GitHub Pro** — indisponível enquanto o repo for privado no plano
-> gratuito. Se isso mudar, aplicar a regra "Require a pull request before
-> merging" na branch `main`.
+> Proteção real no servidor (impedir o merge sem PR para todos, inclusive pela
+> interface web) depende de `Settings → Branches`/`Rules` no GitHub, que exige
+> repositório **público** ou plano **GitHub Pro** — indisponível enquanto o repo
+> for privado no plano gratuito. Se isso mudar, aplicar a regra "Require a pull
+> request before merging" na branch `main`.
 
 ## Convenções
 
