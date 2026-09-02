@@ -5,25 +5,25 @@ Os testes com scipy servem de conferencia independente e sao pulados se scipy
 nao estiver instalado.
 """
 
-import sys
 import pathlib
+import sys
 
 import numpy as np
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
-from utils.info_theory import (  # noqa: E402
-    entropy,
+from utils.info_theory import (
     binary_entropy,
-    joint_entropy,
     conditional_entropy,
-    cross_entropy,
-    kl_divergence,
-    mutual_information,
     conditional_mutual_information,
+    cross_entropy,
+    entropy,
+    joint_entropy,
+    kl_divergence,
     mi_gtest_statistic,
+    mutual_information,
 )
-from utils.simulation import rng, sample_joint  # noqa: E402
+from utils.simulation import rng, sample_joint
 
 TOL = 1e-9
 
@@ -81,7 +81,8 @@ def test_cmi_reduz_a_mi_quando_z_e_constante():
 
 
 def test_gtest_bate_com_scipy():
-    scipy_stats = __import__("importlib").import_module("scipy.stats")
+    import scipy.stats as scipy_stats
+
     g = rng(42)
     true_joint = np.array([[0.30, 0.10], [0.15, 0.45]])
     x, y = sample_joint(true_joint, size=5000, generator=g)
@@ -101,7 +102,7 @@ if __name__ == "__main__":
         try:
             fn()
             print(f"ok   {fn.__name__}")
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             failed += 1
             print(f"FALHOU {fn.__name__}: {exc!r}")
     raise SystemExit(failed)

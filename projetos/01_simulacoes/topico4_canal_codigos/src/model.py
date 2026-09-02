@@ -57,8 +57,8 @@ def hamming74_encode(bits: np.ndarray) -> np.ndarray:
 def hamming74_decode(received: np.ndarray) -> np.ndarray:
     """Decodifica blocos de 7 bits corrigindo até 1 erro por bloco (síndrome)."""
     r = np.asarray(received).astype(int).reshape(-1, 7).copy()
-    syndromes = (r @ H.T) % 2                 # (n_blocos, 3)
-    cols = H.T                                # (7, 3): coluna i de H
+    syndromes = (r @ H.T) % 2  # (n_blocos, 3)
+    cols = H.T  # (7, 3): coluna i de H
     for k, s in enumerate(syndromes):
         if s.any():
             match = np.where((cols == s).all(axis=1))[0]

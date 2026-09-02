@@ -4,8 +4,10 @@
   divergencia de Kullback-Leibler e informacao mutua, implementadas do zero.
 - `simulation`: geradores e canais usados nas simulacoes (amostragem de pmf,
   canal binario simetrico, cadeias de Markov).
+- `estimation`: reamostragem bootstrap para estimativa com intervalo de confianca.
+- `plotting`: estilo padrao dos graficos e salvamento de figuras.
 """
 
-from . import info_theory, simulation
+from . import estimation, info_theory, plotting, simulation
 
-__all__ = ["info_theory", "simulation"]
+__all__ = ["estimation", "info_theory", "plotting", "simulation"]

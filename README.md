@@ -9,6 +9,26 @@ compartilham é o ferramental de teoria da informação em `utils/`.
 
 Desenvolvimento sempre em **Python + Jupyter Notebook**.
 
+## Dependências
+
+Python **>= 3.10**. Pacotes (fixados em `requirements.txt`; os de runtime também
+em `pyproject.toml`):
+
+| Pacote | Versão | Para quê |
+|--------|--------|----------|
+| `numpy` | >= 1.24 | arrays, gerador aleatório, álgebra vetorial — base de tudo |
+| `scipy` | >= 1.10 | conferências independentes (`scipy.stats`: `chi2`, `binom`, ...) |
+| `matplotlib` | >= 3.6 | gráficos dos relatórios |
+| `pandas` | >= 2.0 | organizar resultados de muitas repetições (DataFrame) |
+| `jupyterlab` | >= 4.0 | ambiente dos notebooks |
+| `ipykernel` | >= 6.29 | kernel dos notebooks (usado também pelo `nbmake` no CI) |
+| `pytest` | >= 7.0 | testes de `utils/` |
+| `nbmake` | >= 1.5 | executar os notebooks de ponta a ponta no CI |
+| `ruff` | >= 0.6 | lint + formatação do código Python |
+| `pre-commit` | >= 3.5 | hooks de commit (limpa notebook, roda `ruff`) |
+
+Instalação em **Para começar a trabalhar**.
+
 ## Estrutura
 
 ```
@@ -16,10 +36,15 @@ Desenvolvimento sempre em **Python + Jupyter Notebook**.
 ├── conteudos/                 # PDFs de aula (material de referência)
 ├── propostas/                 # PDFs dos enunciados de cada proposta
 ├── utils/                     # código compartilhado por TODAS as propostas
-│   ├── info_theory.py         #   entropia, entropia conjunta/condicional,
-│   │                          #   entropia cruzada, KL, informação mútua (na mão)
-│   └── simulation.py          #   amostragem de pmf, canal BSC, cadeias de Markov
+│   ├── info_theory.py         #   entropia, conjunta/condicional, cruzada, KL, I(X;Y) (na mão)
+│   ├── simulation.py          #   amostragem de pmf, canal BSC, cadeias de Markov
+│   ├── estimation.py          #   bootstrap: estimativa + intervalo de confiança
+│   └── plotting.py            #   estilo padrão dos gráficos e salvamento de figuras
 ├── tests/                     # testes de sanidade do utils/
+├── scripts/                   # utilitários do repo (ex.: hook que barra push na main)
+├── Makefile                   # atalhos: make setup / test / test-notebooks / lint / lab
+├── .pre-commit-config.yaml    # hooks: nbstripout, ruff, bloqueio de push na main
+├── .github/workflows/ci.yml   # CI: lint + testes + execução dos notebooks
 └── projetos/
     ├── _template/             # esqueleto para começar uma proposta nova
     └── 01_simulacoes/         # propostas/1_Simulacoes.pdf — 4 tópicos
@@ -54,7 +79,11 @@ python -m venv .venv
 source .venv/bin/activate           # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 pip install -e .                    # deixa `import utils...` disponível em qualquer notebook
+pre-commit install --hook-type pre-commit --hook-type pre-push   # ativa os hooks
 ```
+
+Em Linux/macOS, `make setup` faz tudo isso de uma vez (cria o `.venv`, instala e
+ativa os hooks).
 
 No começo de cada sessão de trabalho:
 
@@ -92,10 +121,14 @@ from utils.info_theory import (
 from utils.simulation import (
     rng, sample_pmf, sample_joint, empirical_pmf, bsc, markov_chain,
 )
+from utils.estimation import bootstrap_ci
+from utils.plotting import setup_estilo, salvar_fig
 import src.model as model                     # helpers específicos deste tópico
 
+setup_estilo()
 GEN = rng(20260902)                           # seed fixo -> resultados reproduzíveis
-DADOS = pathlib.Path("dados"); FIGURAS = pathlib.Path("figuras")
+DADOS = pathlib.Path("dados")
+FIGURAS = pathlib.Path("figuras")
 ```
 
 Observações:
@@ -107,6 +140,11 @@ Observações:
   editável (basta ter as dependências).
 - `parents[2]` vale para a profundidade `projetos/<proposta>/<topico>/`. Se um
   notebook ficar em outra profundidade, ajuste o índice.
+- `setup_estilo()` padroniza a aparência dos gráficos; `salvar_fig("nome")` grava
+  em `figuras/nome.png`; `bootstrap_ci(dados, estatística)` devolve
+  `(estimativa, limite_inf, limite_sup)` para as barras de erro das curvas.
+- **Não commite notebook com saída pesada nas células** — o hook `nbstripout`
+  (via `pre-commit`) limpa isso automaticamente no commit.
 
 ## Git — fluxo básico
 
@@ -155,6 +193,50 @@ git merge main                        # resolve conflitos, se houver, e commita
 Artefatos gerados (`dados/`, `figuras/`, `.venv/`, checkpoints) já são ignorados
 pelo `.gitignore` — não precisam entrar nos commits.
 
+## Atalhos (Makefile)
+
+| Comando | O que faz |
+|---------|-----------|
+| `make setup` | cria o `.venv`, instala tudo e ativa os hooks |
+| `make test` | roda os testes de `utils/` (`pytest`) |
+| `make test-notebooks` | executa todos os notebooks e falha se algum quebrar (`nbmake`) |
+| `make lint` | `ruff check` + `ruff format --check` (não altera arquivos) |
+| `make format` | formata e corrige o que der com `ruff` |
+| `make check` | `lint` + `test` (o mesmo que o CI cobra) |
+| `make lab` | abre o JupyterLab |
+| `make clean` | remove caches (`__pycache__`, `.pytest_cache`, checkpoints, `*.egg-info`) |
+
+## Qualidade de código
+
+- **`ruff`** cuida de lint e formatação de `utils/`, `tests/` e `src/`
+  (configuração em `pyproject.toml`; notebooks e `.md` ficam de fora). Rode
+  `make format` antes de commitar, ou deixe o `pre-commit` fazer.
+- **`pre-commit`** roda a cada `git commit` (depois de `pre-commit install`):
+  `nbstripout` limpa a saída das células dos notebooks — evita diffs enormes e
+  conflitos de merge —, e `ruff` corrige/formata o código. Se um hook alterar
+  arquivos, o commit é abortado: revise, dê `git add` de novo e recomite.
+- `.editorconfig` mantém indentação e fim de linha consistentes entre editores.
+
+### Proteção da `main`
+
+Todo trabalho entra na `main` por **Pull Request**, nunca por push direto.
+
+Um hook `pre-push` (`scripts/no-push-to-main.sh`, registrado no
+`.pre-commit-config.yaml`) recusa `git push` que atualize a `main` diretamente.
+Ele é **local**: só vale para quem instalou o hook —
+
+```bash
+pre-commit install --hook-type pre-push     # incluído no `make setup`
+```
+
+— e pode ser contornado com `git push --no-verify` numa emergência.
+
+> Proteção real no servidor (bloquear o merge sem PR para todos) depende de
+> `Settings → Branches`/`Rules` no GitHub, que exige repositório **público** ou
+> plano **GitHub Pro** — indisponível enquanto o repo for privado no plano
+> gratuito. Se isso mudar, aplicar a regra "Require a pull request before
+> merging" na branch `main`.
+
 ## Convenções
 
 - **Implementar a quantidade de interesse "na mão" antes de usar biblioteca.**
@@ -185,12 +267,22 @@ pelo `.gitignore` — não precisam entrar nos commits.
 ## Testes
 
 ```bash
-pytest
-# ou, sem instalar pytest:
+pytest                              # testes de utils/  (make test)
+pytest --nbmake projetos/           # executa os notebooks de ponta a ponta  (make test-notebooks)
+
+# sem depender de pytest:
 python tests/test_info_theory.py
+python tests/test_estimation.py
 ```
 
-Os testes rodam automaticamente no **GitHub Actions** a cada `push` e a cada
-Pull Request (`.github/workflows/ci.yml`), em Python 3.10, 3.11 e 3.12. O status
-aparece no badge no topo deste README e na aba **Actions** do repositório; um PR
-com o CI vermelho não deve ser integrado à `main`.
+O **GitHub Actions** (`.github/workflows/ci.yml`) roda a cada `push` e a cada
+Pull Request, em três jobs:
+
+| Job | O que verifica |
+|-----|----------------|
+| `lint` | `ruff check` + `ruff format --check` |
+| `testes` | `pytest` em Python 3.10, 3.11 e 3.12 |
+| `notebooks` | `pytest --nbmake` — todos os notebooks executam sem erro |
+
+O status aparece no badge no topo deste README e na aba **Actions**; um PR com o
+CI vermelho não deve ser integrado à `main`.

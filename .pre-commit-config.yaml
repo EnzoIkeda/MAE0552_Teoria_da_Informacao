@@ -1,0 +1,43 @@
+minimum_pre_commit_version: "3.5.0"
+
+# Por padrao os hooks rodam so no commit; o bloqueio de push sobrescreve p/ pre-push.
+default_stages: [pre-commit]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=2048"]
+
+  # Tira o output das celulas dos notebooks antes do commit:
+  # evita diffs enormes e conflitos de merge em arquivos .ipynb.
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.8.1
+    hooks:
+      - id: nbstripout
+
+  # Lint + format do codigo Python (utils/, tests/, src/).
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.5
+    hooks:
+      - id: ruff
+        args: ["--fix"]
+      - id: ruff-format
+
+  # Impede 'git push' direto na main (client-side; exige o hook pre-push
+  # instalado -- ver README). Contorno: git push --no-verify.
+  - repo: local
+    hooks:
+      - id: bloqueia-push-na-main
+        name: bloqueia push direto na main
+        entry: scripts/no-push-to-main.sh
+        language: script
+        stages: [pre-push]
+        always_run: true
+        pass_filenames: false

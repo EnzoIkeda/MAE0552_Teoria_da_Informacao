@@ -177,8 +177,8 @@ def conditional_mutual_information(joint_xyz, normalize=True):
     if normalize:
         p = to_distribution(p)
     pz = p.sum(axis=(0, 1))
-    pxz = p.sum(axis=1)   # (X, Z)
-    pyz = p.sum(axis=0)   # (Y, Z)
+    pxz = p.sum(axis=1)  # (X, Z)
+    pyz = p.sum(axis=0)  # (Y, Z)
     h_x_given_z = -_xlog2x(pxz).sum() + _xlog2x(pz).sum()
     h_y_given_z = -_xlog2x(pyz).sum() + _xlog2x(pz).sum()
     h_xy_given_z = -_xlog2x(p).sum() + _xlog2x(pz).sum()
