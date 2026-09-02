@@ -15,7 +15,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "jupyterlab>=4.0"]
+dev = [
+    "pytest>=7.0",
+    "jupyterlab>=4.0",
+    "pre-commit>=3.5",
+    "ruff>=0.6",
+    "nbmake>=1.5",
+    "ipykernel>=6.29",
+]
 
 # Apenas o pacote compartilhado `utils` e instalavel/importavel em qualquer
 # lugar do repositorio. O codigo especifico de cada topico vive no `src/` do
@@ -25,3 +32,14 @@ packages = ["utils"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+extend-exclude = ["*.ipynb", "*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]

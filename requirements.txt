@@ -1,6 +1,15 @@
+# Runtime
 numpy>=1.24
 scipy>=1.10
 matplotlib>=3.6
 pandas>=2.0
+
+# Notebooks
 jupyterlab>=4.0
+ipykernel>=6.29
+
+# Desenvolvimento (testes, lint, hooks)
 pytest>=7.0
+nbmake>=1.5
+ruff>=0.6
+pre-commit>=3.5

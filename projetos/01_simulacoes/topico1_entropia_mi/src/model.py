@@ -16,8 +16,13 @@ import numpy as np
 def true_joint(prevalence: float, fpr: float, fnr: float) -> np.ndarray:
     """Conjunta p(d, t) 2x2. Linhas = D (0, 1), colunas = T (0, 1)."""
     p_d = np.array([1.0 - prevalence, prevalence])
-    p_t_given_d = np.array([[1.0 - fpr, fpr],     # D = 0
-                            [fnr, 1.0 - fnr]])    # D = 1
+    # p(t | d): linha 0 = D=0 (falso positivo fpr); linha 1 = D=1 (falso negativo fnr)
+    p_t_given_d = np.array(
+        [
+            [1.0 - fpr, fpr],
+            [fnr, 1.0 - fnr],
+        ]
+    )
     return p_d[:, None] * p_t_given_d
 
 

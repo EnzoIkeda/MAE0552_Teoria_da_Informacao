@@ -40,4 +40,4 @@ def log_growth_increments(outcomes: np.ndarray, b: np.ndarray, odds: np.ndarray)
     odds = np.asarray(odds, dtype=float)
     x = np.asarray(outcomes).astype(int)
     with np.errstate(divide="ignore"):
-        return np.log2(b[x] * odds[x])   # -inf se b_x = 0 e o resultado x sai
+        return np.log2(b[x] * odds[x])  # -inf se b_x = 0 e o resultado x sai
