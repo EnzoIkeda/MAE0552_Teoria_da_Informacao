@@ -1,6 +1,6 @@
 # 01 — Primeiras simulações em grupo
 
-Enunciado: `Propostas/1_Simulacoes.pdf`.
+Enunciado: `propostas/1_Simulacoes.pdf`.
 
 Quatro atividades de simulação. Cada uma gira em torno de um problema concreto:
 definir um modelo probabilístico, gerar dados segundo esse modelo, estimar

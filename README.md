@@ -1,5 +1,7 @@
 # MAE0552 — Teoria da Informação
 
+[![CI](https://github.com/EnzoIkeda/MAE0552_Teoria_da_Informacao/actions/workflows/ci.yml/badge.svg)](https://github.com/EnzoIkeda/MAE0552_Teoria_da_Informacao/actions/workflows/ci.yml)
+
 Repositório do grupo para as atividades práticas da disciplina. Cada **proposta**
 entregue ao longo do semestre vira um subprojeto independente dentro de
 `projetos/`. As propostas não têm necessariamente a mesma finalidade — o que elas
@@ -11,8 +13,8 @@ Desenvolvimento sempre em **Python + Jupyter Notebook**.
 
 ```
 .
-├── Conteudos/                 # PDFs de aula (material de referência)
-├── Propostas/                 # PDFs dos enunciados de cada proposta
+├── conteudos/                 # PDFs de aula (material de referência)
+├── propostas/                 # PDFs dos enunciados de cada proposta
 ├── utils/                     # código compartilhado por TODAS as propostas
 │   ├── info_theory.py         #   entropia, entropia conjunta/condicional,
 │   │                          #   entropia cruzada, KL, informação mútua (na mão)
@@ -20,7 +22,7 @@ Desenvolvimento sempre em **Python + Jupyter Notebook**.
 ├── tests/                     # testes de sanidade do utils/
 └── projetos/
     ├── _template/             # esqueleto para começar uma proposta nova
-    └── 01_simulacoes/         # Propostas/1_Simulacoes.pdf — 4 tópicos
+    └── 01_simulacoes/         # propostas/1_Simulacoes.pdf — 4 tópicos
         ├── topico1_entropia_mi/
         ├── topico2_dpi_markov/
         ├── topico3_aep_kelly/
@@ -178,7 +180,7 @@ pelo `.gitignore` — não precisam entrar nos commits.
    ```
 2. Renomeie/duplique as pastas de tópico conforme o enunciado e ajuste os
    `relatorio.md`.
-3. Registre a proposta em `projetos/README.md` e guarde o PDF em `Propostas/`.
+3. Registre a proposta em `projetos/README.md` e guarde o PDF em `propostas/`.
 
 ## Testes
 
@@ -187,3 +189,8 @@ pytest
 # ou, sem instalar pytest:
 python tests/test_info_theory.py
 ```
+
+Os testes rodam automaticamente no **GitHub Actions** a cada `push` e a cada
+Pull Request (`.github/workflows/ci.yml`), em Python 3.10, 3.11 e 3.12. O status
+aparece no badge no topo deste README e na aba **Actions** do repositório; um PR
+com o CI vermelho não deve ser integrado à `main`.
