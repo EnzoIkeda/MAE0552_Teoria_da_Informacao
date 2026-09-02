@@ -1,0 +1,1364 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Referência do utils/</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* ---------- tokens: light is the base ---------- */
+  :root {
+    --bg:        #f4f5f8;
+    --surface:   #ffffff;
+    --surface-2: #eceef3;
+    --ink:       #1b2130;
+    --ink-soft:  #58617a;
+    --rule:      #dde0e8;
+    --accent:    #3a34a8;
+    --accent-soft:#e7e6fa;
+    --teorico:   #a8452c;
+    --code-str:  #3f7d5b;
+    --shadow:    0 1px 2px rgba(20, 24, 40, .06), 0 8px 24px rgba(20, 24, 40, .05);
+    --measure: 66ch;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:        #14161d;
+      --surface:   #1b1e27;
+      --surface-2: #23262f;
+      --ink:       #e7e9f0;
+      --ink-soft:  #99a1b4;
+      --rule:      #2c303a;
+      --accent:    #a9a6f6;
+      --accent-soft:#262559;
+      --teorico:   #e8926f;
+      --code-str:  #82c9a1;
+      --shadow:    0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .28);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:        #14161d;
+    --surface:   #1b1e27;
+    --surface-2: #23262f;
+    --ink:       #e7e9f0;
+    --ink-soft:  #99a1b4;
+    --rule:      #2c303a;
+    --accent:    #a9a6f6;
+    --accent-soft:#262559;
+    --teorico:   #e8926f;
+    --code-str:  #82c9a1;
+    --shadow:    0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .28);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  code, pre, kbd { font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+
+  /* ---------- shell ---------- */
+  .page { max-width: 1180px; margin: 0 auto; padding: clamp(1.4rem, 4vw, 3.4rem); }
+
+  .masthead { margin-bottom: clamp(2.2rem, 5vw, 3.4rem); }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .72rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 1rem;
+  }
+
+  h1 {
+    font-family: "Spectral", Georgia, "Times New Roman", serif;
+    font-weight: 600;
+    font-size: clamp(2.1rem, 5vw, 3rem);
+    line-height: 1.08;
+    letter-spacing: -.01em;
+    text-wrap: balance;
+    margin: 0 0 .9rem;
+  }
+  h1 .slash { color: var(--accent); font-style: italic; }
+
+  .lead {
+    font-family: "Spectral", Georgia, serif;
+    font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--ink);
+    max-width: 62ch;
+    margin: 0 0 1.6rem;
+  }
+
+  .chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }
+  .chip {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .76rem;
+    padding: .3rem .6rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .chip b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- conventions band ---------- */
+  .conventions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: clamp(2.4rem, 6vw, 3.8rem);
+  }
+  .conventions > div { background: var(--surface); padding: 1.1rem 1.25rem; }
+  .conventions h3 {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .82rem;
+    font-weight: 600;
+    margin: 0 0 .35rem;
+    color: var(--accent);
+  }
+  .conventions p { margin: 0; font-size: .9rem; color: var(--ink-soft); }
+  .conventions code { font-size: .84em; color: var(--ink); background: var(--surface-2); padding: .05em .35em; border-radius: 3px; }
+
+  /* ---------- two-column shell ---------- */
+  .shell {
+    display: grid;
+    grid-template-columns: 216px minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .toc {
+    position: sticky;
+    top: 1.4rem;
+    max-height: calc(100vh - 2.8rem);
+    overflow-y: auto;
+    font-size: .84rem;
+    padding-right: .4rem;
+  }
+  .toc__title {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .68rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 .8rem;
+  }
+  .toc__group {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 1.15rem 0 .4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .toc__group:first-of-type { margin-top: 0; }
+  .toc__group span { color: var(--ink-soft); font-weight: 400; font-size: .72rem; }
+  .toc ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
+  .toc li a {
+    display: block;
+    padding: .18rem 0 .18rem .7rem;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    color: var(--ink-soft);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .78rem;
+    line-height: 1.45;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .toc li a:hover { color: var(--ink); text-decoration: none; }
+  .toc li a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
+
+  .content { min-width: 0; }
+
+  /* ---------- module section ---------- */
+  .module { margin-bottom: clamp(3.4rem, 8vw, 5.5rem); }
+  .module__head { scroll-margin-top: 1.5rem; }
+  .module__name {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: clamp(1.4rem, 3.4vw, 1.9rem);
+    font-weight: 600;
+    margin: 0 0 .1rem;
+    color: var(--ink);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .6rem;
+  }
+  .module__file { color: var(--ink-soft); font-weight: 400; font-size: .8rem; }
+  .module__intro {
+    max-width: var(--measure);
+    color: var(--ink-soft);
+    font-size: .95rem;
+    margin: .6rem 0 0;
+    padding-bottom: 1.4rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .module__intro code { font-size: .85em; color: var(--ink); background: var(--surface-2); padding: .05em .35em; border-radius: 3px; }
+
+  /* ---------- function entry ---------- */
+  .fn { scroll-margin-top: 1.5rem; padding-top: 2.2rem; }
+  .fn + .fn { border-top: 1px solid var(--rule); }
+
+  .fn__name {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 1.02rem;
+    font-weight: 600;
+    margin: 0 0 .7rem;
+    color: var(--ink);
+    scroll-margin-top: 1.5rem;
+  }
+
+  .sig {
+    background: var(--surface-2);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: .8rem 1rem;
+    margin: 0 0 1rem;
+    overflow-x: auto;
+  }
+  .sig pre { margin: 0; font-size: .86rem; line-height: 1.6; color: var(--ink); white-space: pre; }
+  .sig .ret { color: var(--teorico); }
+  .sig .kw { color: var(--accent); }
+
+  .fn__desc { max-width: var(--measure); margin: 0 0 1.1rem; }
+  .fn__desc code { font-size: .85em; color: var(--ink); background: var(--surface-2); padding: .05em .35em; border-radius: 3px; }
+  .fn__desc + .fn__desc { margin-top: -.4rem; }
+
+  dl.params {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: .35rem 1.1rem;
+    max-width: var(--measure);
+    margin: 0 0 1.2rem;
+    padding-left: .9rem;
+    border-left: 1px solid var(--rule);
+    font-size: .9rem;
+  }
+  dl.params dt { font-family: "IBM Plex Mono", monospace; font-size: .82rem; color: var(--ink); font-weight: 500; }
+  dl.params dd { margin: 0; color: var(--ink-soft); }
+  dl.params dd code { font-size: .88em; background: var(--surface-2); padding: .03em .3em; border-radius: 3px; color: var(--ink); }
+
+  /* ---------- code blocks ---------- */
+  .code { position: relative; margin: 0 0 .4rem; }
+  .code__label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .68rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: .35rem;
+  }
+  pre.block {
+    margin: 0;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    font-size: .845rem;
+    line-height: 1.7;
+    box-shadow: var(--shadow);
+  }
+  pre.block code { color: var(--ink); }
+
+  .copy {
+    position: absolute;
+    top: calc(1.4rem);
+    right: .5rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .68rem;
+    padding: .25rem .55rem;
+    background: var(--surface-2);
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity .12s ease;
+  }
+  .code:hover .copy, .code:focus-within .copy { opacity: 1; }
+  .copy:hover { color: var(--ink); }
+
+  /* highlight.js token colors mapped to tokens */
+  .hljs-comment, .hljs-quote { color: var(--ink-soft); font-style: italic; }
+  .hljs-keyword, .hljs-literal, .hljs-type { color: var(--accent); }
+  .hljs-string, .hljs-meta .hljs-string { color: var(--code-str); }
+  .hljs-number { color: var(--teorico); }
+  .hljs-built_in { color: var(--ink-soft); }
+  .hljs-title, .hljs-title.function_, .hljs-title.class_ { color: var(--ink); font-weight: 600; }
+  .hljs-params { color: var(--ink); }
+  .hljs-attr { color: var(--ink); }
+
+  /* ---------- theme toggle ---------- */
+  .toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 20;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .72rem;
+    padding: .4rem .7rem;
+    background: var(--surface);
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+  .toggle:hover { color: var(--ink); }
+
+  .footer {
+    margin-top: 4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--rule);
+    font-size: .82rem;
+    color: var(--ink-soft);
+    max-width: var(--measure);
+  }
+  .footer code { background: var(--surface-2); padding: .05em .35em; border-radius: 3px; color: var(--ink); }
+
+  @media (max-width: 860px) {
+    .shell { grid-template-columns: 1fr; }
+    .toc { position: static; max-height: none; border: 1px solid var(--rule); border-radius: 10px; padding: 1.1rem 1.2rem; margin-bottom: 2.5rem; }
+    .conventions { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+  }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+<button class="toggle" id="themeToggle" type="button" aria-label="Alternar tema">tema</button>
+
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">MAE0552 · Teoria da Informação · IME-USP</p>
+    <h1>Referência do <span class="slash">utils/</span></h1>
+    <p class="lead">
+      O ferramental compartilhado pelas quatro simulações da Proposta 1: entropia e
+      informação mútua escritas a partir da definição, amostragem e canais, intervalos
+      por <em>bootstrap</em>, e a camada de gráficos e tabelas dos relatórios.
+    </p>
+    <div class="chips">
+      <span class="chip"><b>4</b> módulos</span>
+      <span class="chip"><b>35</b> funções</span>
+      <span class="chip">unidade: <b>bits</b> (log₂)</span>
+      <span class="chip">0 · log₂ 0 = 0</span>
+    </div>
+
+    <div class="code" data-code>
+      <div class="code__label">no início de cada notebook</div>
+      <pre class="block"><code class="language-python">import sys, pathlib
+
+REPO = pathlib.Path.cwd().parents[2]          # .../&lt;topico&gt; -&gt; .../&lt;proposta&gt; -&gt; raiz
+if str(REPO) not in sys.path:
+    sys.path.insert(0, str(REPO))
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+from utils.info_theory import (
+    entropy, binary_entropy, joint_entropy, conditional_entropy,
+    cross_entropy, kl_divergence, mutual_information,
+    conditional_mutual_information, mi_gtest_statistic,
+)
+from utils.simulation import (
+    rng, sample_pmf, sample_joint, empirical_pmf, bsc, markov_chain,
+)
+from utils.estimation import bootstrap_ci
+from utils.plotting import setup_estilo, salvar_fig
+
+setup_estilo()
+GEN = rng(20260902)                           # seed fixo -&gt; reprodutível</code></pre>
+      <button class="copy" type="button">copiar</button>
+    </div>
+  </header>
+
+  <div class="conventions">
+    <div>
+      <h3>unidade: bits</h3>
+      <p>Todo logaritmo é base 2. <code>entropy</code>, <code>mutual_information</code>,
+      <code>kl_divergence</code>… devolvem <code>float</code> em bits.</p>
+    </div>
+    <div>
+      <h3>0 · log₂ 0 = 0</h3>
+      <p>A convenção é aplicada em todos os somatórios, coerente com
+      lim<sub>p→0⁺</sub> p·log p = 0.</p>
+    </div>
+    <div>
+      <h3>eixos da tabela conjunta</h3>
+      <p>Numa tabela 2D <code>joint</code>: eixo 0 = X (linhas), eixo 1 = Y (colunas).
+      Para 3D em <code>conditional_mutual_information</code>: (X, Y, Z) = (0, 1, 2).</p>
+    </div>
+    <div>
+      <h3>na mão primeiro</h3>
+      <p>As quantidades saem da definição; <code>scipy.stats</code> entra só como
+      conferência independente (ex.: <code>mi_gtest_statistic</code> + <code>chi2.sf</code>).</p>
+    </div>
+  </div>
+
+  <div class="shell">
+
+    <nav class="toc" aria-label="Índice das funções">
+      <p class="toc__title">Índice</p>
+
+      <p class="toc__group">info_theory <span>11</span></p>
+      <ul>
+        <li><a href="#to_distribution">to_distribution</a></li>
+        <li><a href="#counts_to_joint">counts_to_joint</a></li>
+        <li><a href="#entropy">entropy</a></li>
+        <li><a href="#binary_entropy">binary_entropy</a></li>
+        <li><a href="#joint_entropy">joint_entropy</a></li>
+        <li><a href="#conditional_entropy">conditional_entropy</a></li>
+        <li><a href="#cross_entropy">cross_entropy</a></li>
+        <li><a href="#kl_divergence">kl_divergence</a></li>
+        <li><a href="#mutual_information">mutual_information</a></li>
+        <li><a href="#conditional_mutual_information">conditional_mutual_…</a></li>
+        <li><a href="#mi_gtest_statistic">mi_gtest_statistic</a></li>
+      </ul>
+
+      <p class="toc__group">simulation <span>6</span></p>
+      <ul>
+        <li><a href="#rng">rng</a></li>
+        <li><a href="#sample_pmf">sample_pmf</a></li>
+        <li><a href="#sample_joint">sample_joint</a></li>
+        <li><a href="#empirical_pmf">empirical_pmf</a></li>
+        <li><a href="#bsc">bsc</a></li>
+        <li><a href="#markov_chain">markov_chain</a></li>
+      </ul>
+
+      <p class="toc__group">estimation <span>1</span></p>
+      <ul>
+        <li><a href="#bootstrap_ci">bootstrap_ci</a></li>
+      </ul>
+
+      <p class="toc__group">plotting <span>17</span></p>
+      <ul>
+        <li><a href="#setup_estilo">setup_estilo</a></li>
+        <li><a href="#cores">cores</a></li>
+        <li><a href="#salvar_fig">salvar_fig</a></li>
+        <li><a href="#plot_estimativa_vs_n">plot_estimativa_vs_n</a></li>
+        <li><a href="#plot_curvas">plot_curvas</a></li>
+        <li><a href="#plot_pmf">plot_pmf</a></li>
+        <li><a href="#plot_barras">plot_barras</a></li>
+        <li><a href="#plot_entropia_binaria">plot_entropia_binaria</a></li>
+        <li><a href="#heatmap_matriz">heatmap_matriz</a></li>
+        <li><a href="#plot_distribuicao">plot_distribuicao</a></li>
+        <li><a href="#plot_ecdf">plot_ecdf</a></li>
+        <li><a href="#tabela">tabela</a></li>
+        <li><a href="#tabela_conjunta">tabela_conjunta</a></li>
+        <li><a href="#tabela_comparacao">tabela_comparacao</a></li>
+        <li><a href="#formata_ic">formata_ic</a></li>
+        <li><a href="#df_para_markdown">df_para_markdown</a></li>
+        <li><a href="#salvar_tabela">salvar_tabela</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+
+      <div class="code" data-code style="margin-bottom:2.6rem">
+        <div class="code__label">exemplo-base — reutilizado nos exemplos desta página</div>
+        <pre class="block"><code class="language-python">g = rng(20260902)
+x = sample_pmf([0.5, 0.5], 100_000, g)       # fonte binária uniforme
+y = bsc(x, 0.1, g)                           # canal binário simétrico, p = 0.1
+N = counts_to_joint(x, y, size_x=2, size_y=2)
+# N -&gt; array([[44885,  5021],
+#             [ 4951, 45143]])</code></pre>
+        <button class="copy" type="button">copiar</button>
+      </div>
+
+      <!-- ================= info_theory ================= -->
+      <section class="module" id="info_theory">
+        <div class="module__head">
+          <h2 class="module__name">info_theory <span class="module__file">utils/info_theory.py</span></h2>
+          <p class="module__intro">
+            Entropia, entropias conjunta e condicional, entropia cruzada, divergência de
+            Kullback–Leibler e informação mútua — todas a partir da definição, em bits.
+            Recebem vetores de probabilidade <em>ou</em> de contagens; com
+            <code>normalize=True</code> (padrão) a normalização é feita antes do cálculo.
+          </p>
+        </div>
+
+        <article class="fn">
+          <h3 class="fn__name" id="to_distribution">to_distribution</h3>
+          <div class="sig"><pre>to_distribution(p, axis=<span class="kw">None</span>) <span class="ret">-&gt; np.ndarray</span></pre></div>
+          <p class="fn__desc">
+            Normaliza contagens ou pesos não negativos para uma distribuição de
+            probabilidade. Levanta <code>ValueError</code> se houver valor negativo ou se a
+            soma for nula. É o pré-processamento que as demais funções chamam internamente.
+          </p>
+          <dl class="params">
+            <dt>p</dt><dd>array de contagens/pesos ≥ 0.</dd>
+            <dt>axis</dt><dd><code>None</code> normaliza pelo total do array inteiro; um eixo normaliza ao longo dele — útil para obter <code>p(y | x)</code> de uma tabela conjunta.</dd>
+          </dl>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">to_distribution([2, 2, 4])                    # -&gt; array([0.25, 0.25, 0.5 ])
+
+to_distribution([[1, 3],                      # normaliza cada linha: p(y | x)
+                 [2, 2]], axis=1)             # -&gt; array([[0.25, 0.75],
+                                              #           [0.5 , 0.5 ]])</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="counts_to_joint">counts_to_joint</h3>
+          <div class="sig"><pre>counts_to_joint(x, y, size_x=<span class="kw">None</span>, size_y=<span class="kw">None</span>) <span class="ret">-&gt; np.ndarray</span></pre></div>
+          <p class="fn__desc">
+            Monta a tabela de contagens conjuntas <code>N[i, j] = #{amostras com x=i, y=j}</code>
+            a partir de dois vetores de rótulos inteiros. É a ponte entre uma simulação
+            (pares de símbolos) e as funções que recebem <code>joint</code>.
+          </p>
+          <dl class="params">
+            <dt>x, y</dt><dd>vetores de inteiros ≥ 0, mesmo comprimento.</dd>
+            <dt>size_x, size_y</dt><dd>tamanho do alfabeto; fixe quando algum símbolo puder não aparecer na amostra (senão é inferido do máximo).</dd>
+          </dl>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">a = sample_pmf([0.5, 0.5], 10_000, g)
+b = bsc(a, 0.2, g)
+counts_to_joint(a, b, size_x=2, size_y=2)
+# -&gt; array([[3982, 1007],
+#           [ 991, 4020]])</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="entropy">entropy</h3>
+          <div class="sig"><pre>entropy(p, normalize=<span class="kw">True</span>) <span class="ret">-&gt; float</span></pre></div>
+          <p class="fn__desc">
+            H(X) = −Σ<sub>x</sub> p(x) log₂ p(x), em bits. Passe <code>normalize=False</code>
+            se <code>p</code> já é uma distribuição (evita renormalizar por ruído numérico).
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">entropy([1, 1, 1, 1])        # uniforme em 4 símbolos  -&gt; 2.0
+entropy([0.9, 0.1])          # moeda viciada           -&gt; 0.4690
+entropy(empirical_pmf(x, 2)) # da amostra do exemplo-base -&gt; ~1.0</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="binary_entropy">binary_entropy</h3>
+          <div class="sig"><pre>binary_entropy(p) <span class="ret">-&gt; float | np.ndarray</span></pre></div>
+          <p class="fn__desc">
+            H<sub>b</sub>(p) = −p log₂ p − (1−p) log₂(1−p). Aceita escalar ou array
+            (vetorizada), útil para desenhar a curva ou avaliar em vários <code>p</code> de uma vez.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">binary_entropy(0.11)              # -&gt; 0.4999
+binary_entropy([0.0, 0.5, 1.0])   # -&gt; array([0., 1., 0.])
+
+# capacidade de um BSC com prob. de erro 0.1:
+1 - binary_entropy(0.1)           # -&gt; 0.5310  bits/uso</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="joint_entropy">joint_entropy</h3>
+          <div class="sig"><pre>joint_entropy(joint, normalize=<span class="kw">True</span>) <span class="ret">-&gt; float</span></pre></div>
+          <p class="fn__desc">
+            H(X, Y) a partir de uma tabela conjunta (contagens ou probabilidades).
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">joint_entropy(N)     # tabela do exemplo-base  -&gt; 1.4681</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="conditional_entropy">conditional_entropy</h3>
+          <div class="sig"><pre>conditional_entropy(joint, given=<span class="hljs-string">"x"</span>, normalize=<span class="kw">True</span>) <span class="ret">-&gt; float</span></pre></div>
+          <p class="fn__desc">
+            Entropia condicional a partir de uma tabela conjunta 2D.
+          </p>
+          <dl class="params">
+            <dt>given</dt><dd><code>"x"</code> / <code>"rows"</code> / <code>0</code> → H(Y | X) = H(X,Y) − H(X). &nbsp; <code>"y"</code> / <code>"cols"</code> / <code>1</code> → H(X | Y).</dd>
+          </dl>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">conditional_entropy(N, given="x")   # H(Y | X): ruído do canal  -&gt; 0.4681
+conditional_entropy(N, given="y")   # H(X | Y): equivocação     -&gt; 0.4671
+
+# confere: H(Y|X) ~ H_b(0.1)
+binary_entropy(0.1)                 # -&gt; 0.4690</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="cross_entropy">cross_entropy</h3>
+          <div class="sig"><pre>cross_entropy(p, q, normalize=<span class="kw">True</span>) <span class="ret">-&gt; float</span></pre></div>
+          <p class="fn__desc">
+            H(p, q) = −Σ<sub>x</sub> p(x) log₂ q(x). Retorna <code>+inf</code> se
+            <code>q(x) = 0</code> em algum ponto com <code>p(x) &gt; 0</code>. Vale a
+            identidade H(p, q) = H(p) + D(p‖q).
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">p, q = [0.5, 0.25, 0.25], [0.25, 0.25, 0.5]
+cross_entropy(p, q)     # -&gt; 1.75   ( = H(p) + D(p||q) = 1.5 + 0.25 )</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="kl_divergence">kl_divergence</h3>
+          <div class="sig"><pre>kl_divergence(p, q, normalize=<span class="kw">True</span>) <span class="ret">-&gt; float</span></pre></div>
+          <p class="fn__desc">
+            D(p‖q) = Σ<sub>x</sub> p(x) log₂ [p(x) / q(x)] ≥ 0, em bits. Não é simétrica.
+            Retorna <code>+inf</code> quando <code>q</code> zera onde <code>p</code> é positiva.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">kl_divergence([0.5, 0.25, 0.25], [0.25, 0.25, 0.5])   # -&gt; 0.25
+kl_divergence([0.5, 0.5], [1.0, 0.0])                  # suporte quebra -&gt; inf</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="mutual_information">mutual_information</h3>
+          <div class="sig"><pre>mutual_information(joint, normalize=<span class="kw">True</span>) <span class="ret">-&gt; float</span></pre></div>
+          <p class="fn__desc">
+            I(X; Y) = H(X) + H(Y) − H(X, Y), a partir de uma tabela conjunta 2D. Como a
+            entrada pode ser contagens, serve direto para a estimativa
+            <em>plug-in</em> de I a partir de uma amostra.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">mutual_information(N)          # Î(X; Y) do BSC no exemplo-base  -&gt; 0.5319
+1 - binary_entropy(0.1)        # capacidade teórica             -&gt; 0.5310</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="conditional_mutual_information">conditional_mutual_information</h3>
+          <div class="sig"><pre>conditional_mutual_information(joint_xyz, normalize=<span class="kw">True</span>) <span class="ret">-&gt; float</span></pre></div>
+          <p class="fn__desc">
+            I(X; Y | Z) a partir de <code>p(x, y, z)</code>, com eixos
+            (X, Y, Z) = (0, 1, 2). Usada na desigualdade do processamento de dados
+            (tópico 2): se X → Z → Y é Markov, então I(X; Y | Z) = 0.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python"># X, Y independentes dado Z  =&gt;  I(X; Y | Z) = 0
+p_xyz = np.ones((2, 2, 2)) / 8
+conditional_mutual_information(p_xyz)   # -&gt; 0.0</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="mi_gtest_statistic">mi_gtest_statistic</h3>
+          <div class="sig"><pre>mi_gtest_statistic(counts) <span class="ret">-&gt; (G, dof, I_hat_bits)</span></pre></div>
+          <p class="fn__desc">
+            Escreve a estatística do teste-G de independência via informação mútua:
+            G = 2N·ln(2)·Î(X; Y), que sob H₀ segue qui-quadrado com
+            (r−1)(c−1) graus de liberdade. O p-valor sai de
+            <code>scipy.stats.chi2.sf(G, dof)</code> e serve de conferência independente.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">G, dof, i_hat = mi_gtest_statistic(N)
+# G     -&gt; 73735.77
+# dof   -&gt; 1
+# i_hat -&gt; 0.5319   (bits, = mutual_information(N))
+
+from scipy.stats import chi2
+chi2.sf(G, dof)          # p-valor -&gt; 0.0  (rejeita independência)</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= simulation ================= -->
+      <section class="module" id="simulation">
+        <div class="module__head">
+          <h2 class="module__name">simulation <span class="module__file">utils/simulation.py</span></h2>
+          <p class="module__intro">
+            Geração e canais: amostragem de uma pmf ou de uma tabela conjunta, canal
+            binário simétrico e cadeias de Markov. Nada aqui calcula quantidade de
+            informação. Passe sempre um <code>generator</code> com seed fixo para
+            reprodutibilidade.
+          </p>
+        </div>
+
+        <article class="fn">
+          <h3 class="fn__name" id="rng">rng</h3>
+          <div class="sig"><pre>rng(seed=<span class="kw">None</span>) <span class="ret">-&gt; np.random.Generator</span></pre></div>
+          <p class="fn__desc">
+            Só um atalho para <code>np.random.default_rng(seed)</code>. A convenção do
+            projeto é uma linha <code>GEN = rng(20260902)</code> por notebook, e passar
+            <code>GEN</code> a toda função que sorteia.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">g = rng(20260902)
+g.random(3)                 # mesmo seed -&gt; mesma sequência em toda máquina
+g.integers(0, 6, size=5)    # dados de 6 faces</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="sample_pmf">sample_pmf</h3>
+          <div class="sig"><pre>sample_pmf(p, size, generator=<span class="kw">None</span>) <span class="ret">-&gt; np.ndarray[int]</span></pre></div>
+          <p class="fn__desc">
+            Amostra <code>size</code> inteiros em {0, …, k−1} segundo a pmf <code>p</code>
+            (normalizada internamente).
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">amostra = sample_pmf([0.2, 0.3, 0.5], size=10_000, generator=g)
+empirical_pmf(amostra, size=3)     # -&gt; array([~0.20, ~0.30, ~0.50])</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="sample_joint">sample_joint</h3>
+          <div class="sig"><pre>sample_joint(joint, size, generator=<span class="kw">None</span>) <span class="ret">-&gt; (x, y)</span></pre></div>
+          <p class="fn__desc">
+            Amostra <code>size</code> pares <code>(x, y)</code> segundo a tabela conjunta 2D
+            <code>joint</code>. Devolve dois arrays de inteiros. Útil quando o modelo é dado
+            por p(x, y) e não por uma fonte + canal.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">J = [[0.4, 0.1],
+     [0.2, 0.3]]
+x_s, y_s = sample_joint(J, size=5, generator=g)
+# x_s -&gt; array([1, 0, 1, 0, 0])
+# y_s -&gt; array([1, 0, 1, 0, 0])
+
+# fecha o ciclo: estimar I(X; Y) do modelo
+xs, ys = sample_joint(J, 50_000, g)
+mutual_information(counts_to_joint(xs, ys, 2, 2))   # -&gt; ~0.13</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="empirical_pmf">empirical_pmf</h3>
+          <div class="sig"><pre>empirical_pmf(samples, size=<span class="kw">None</span>) <span class="ret">-&gt; np.ndarray</span></pre></div>
+          <p class="fn__desc">
+            Frequência relativa de <code>samples</code> (inteiros ≥ 0) como vetor de
+            probabilidades. Passe <code>size</code> para reservar posição a símbolos que
+            não apareceram.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">empirical_pmf([0, 0, 1, 2, 2, 2])        # -&gt; array([0.333, 0.167, 0.5  ])
+empirical_pmf([0, 0, 1], size=4)         # símbolo 3 ausente
+# -&gt; array([0.667, 0.333, 0.   , 0.   ])</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="bsc">bsc</h3>
+          <div class="sig"><pre>bsc(bits, p, generator=<span class="kw">None</span>) <span class="ret">-&gt; np.ndarray[int]</span></pre></div>
+          <p class="fn__desc">
+            Canal binário simétrico: inverte cada bit de forma independente com
+            probabilidade <code>p</code>. Preserva o formato do array de entrada.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">bits = np.array([0, 0, 1, 1, 0, 1])
+bsc(bits, p=0.0, generator=g)     # -&gt; [0 0 1 1 0 1]  (idêntico)
+bsc(bits, p=1.0, generator=g)     # -&gt; [1 1 0 0 1 0]  (tudo invertido)
+
+# BER empírica bate com p:
+env = sample_pmf([0.5, 0.5], 200_000, g)
+(bsc(env, 0.1, g) != env).mean()  # -&gt; ~0.100</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="markov_chain">markov_chain</h3>
+          <div class="sig"><pre>markov_chain(P, n, generator=<span class="kw">None</span>, x0=<span class="kw">None</span>) <span class="ret">-&gt; np.ndarray[int]</span></pre></div>
+          <p class="fn__desc">
+            Sequência de <code>n</code> estados de uma cadeia de Markov com matriz de
+            transição <code>P</code>, onde <code>P[i, j] = P(próximo = j | atual = i)</code>.
+            Se <code>x0</code> é <code>None</code>, o estado inicial é uniforme. Laço
+            explícito — transparente para poucos estados.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">P = np.array([[0.9, 0.1],
+              [0.5, 0.5]])
+markov_chain(P, n=10, generator=g, x0=0)
+# -&gt; array([0, 0, 0, 0, 0, 0, 1, 0, 0, 0])
+
+# distribuição estacionária (empírica):
+empirical_pmf(markov_chain(P, 100_000, g), size=2)   # -&gt; array([~0.83, ~0.17])</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= estimation ================= -->
+      <section class="module" id="estimation">
+        <div class="module__head">
+          <h2 class="module__name">estimation <span class="module__file">utils/estimation.py</span></h2>
+          <p class="module__intro">
+            Uma função. Reamostragem <em>bootstrap</em> (método do percentil) para pôr
+            barra de erro em qualquer estatística — inclusive as de <code>info_theory</code>.
+            Todos os tópicos comparam “estimado vs teórico” e precisam dessa incerteza.
+          </p>
+        </div>
+
+        <article class="fn">
+          <h3 class="fn__name" id="bootstrap_ci">bootstrap_ci</h3>
+          <div class="sig"><pre>bootstrap_ci(
+    data, statistic, n_boot=<span class="hljs-number">2000</span>, ci=<span class="hljs-number">95</span>,
+    generator=<span class="kw">None</span>, paired=<span class="kw">True</span>,
+) <span class="ret">-&gt; (estimativa, baixo, alto)</span></pre></div>
+          <p class="fn__desc">
+            Reamostra <code>data</code> com reposição <code>n_boot</code> vezes, aplica
+            <code>statistic</code> a cada réplica e devolve a estimativa na amostra
+            original mais os limites do intervalo de <code>ci</code>%.
+          </p>
+          <dl class="params">
+            <dt>data</dt><dd>um array, ou uma tupla de arrays de mesmo tamanho (ex.: <code>(x, y)</code>). Com tupla e <code>paired=True</code>, cada réplica usa os <em>mesmos</em> índices em todos os arrays — preserva a dependência entre colunas.</dd>
+            <dt>statistic</dt><dd><code>statistic(sample)</code> ou <code>statistic(*samples)</code> → <code>float</code>.</dd>
+            <dt>ci</dt><dd>nível em %, ex.: <code>95</code> → percentis 2.5 e 97.5.</dd>
+            <dt>generator</dt><dd>use um <code>rng(seed)</code> para reprodutibilidade.</dd>
+          </dl>
+          <div class="code" data-code>
+            <div class="code__label">exemplo — IC para a entropia estimada</div>
+            <pre class="block"><code class="language-python">amostra = sample_pmf([0.5, 0.5], 2000, g)
+bootstrap_ci(amostra,
+             lambda s: entropy(empirical_pmf(s, 2)),
+             n_boot=2000, ci=95, generator=g)
+# -&gt; (1.0000, 0.9983, 1.0000)     (estimativa, limite_inf, limite_sup)</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+          <div class="code" data-code>
+            <div class="code__label">exemplo — bootstrap pareado para I(X; Y)</div>
+            <pre class="block"><code class="language-python">def i_hat(a, b):
+    return mutual_information(counts_to_joint(a, b, 2, 2))
+
+bootstrap_ci((x[:2000], y[:2000]), i_hat, generator=g)
+# -&gt; (0.575, 0.531, 0.621)   aprox. — depende de n_boot e do seed</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= plotting ================= -->
+      <section class="module" id="plotting">
+        <div class="module__head">
+          <h2 class="module__name">plotting <span class="module__file">utils/plotting.py</span></h2>
+          <p class="module__intro">
+            Estilo padrão, <em>wrappers</em> de seaborn para os gráficos que reaparecem nos
+            quatro tópicos, e utilidades de tabela para colar no <code>relatorio.md</code>.
+            Os gráficos aceitam <code>ax=</code> e devolvem o <code>ax</code>. Constantes do
+            módulo: <code>PALETA</code> (paleta <em>deep</em>) e <code>COR_TEORICO</code>
+            (cor reservada à referência teórica).
+          </p>
+        </div>
+
+        <article class="fn">
+          <h3 class="fn__name" id="setup_estilo">setup_estilo</h3>
+          <div class="sig"><pre>setup_estilo(overrides=<span class="kw">None</span>, usar_seaborn=<span class="kw">True</span>) <span class="ret">-&gt; None</span></pre></div>
+          <p class="fn__desc">
+            Aplica o estilo do projeto: com <code>usar_seaborn=True</code> define primeiro o
+            tema do seaborn (<code>whitegrid</code> + paleta <code>deep</code>) e, por cima,
+            os <code>rcParams</code> do projeto, que têm a palavra final. Chame uma vez, no
+            início do notebook.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">setup_estilo()                                # padrão
+setup_estilo({"figure.figsize": (9, 3)})      # ajuste pontual de rcParams</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="cores">cores</h3>
+          <div class="sig"><pre>cores(n, paleta=<span class="hljs-string">"deep"</span>) <span class="ret">-&gt; list</span></pre></div>
+          <p class="fn__desc">
+            Lista de <code>n</code> cores distintas de uma paleta nomeada do seaborn — para
+            colorir manualmente várias séries.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">fig, ax = plt.subplots()
+series = [serie_a, serie_b, serie_c]
+for serie, cor in zip(series, cores(len(series))):
+    ax.plot(serie, color=cor)</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="salvar_fig">salvar_fig</h3>
+          <div class="sig"><pre>salvar_fig(nome, fig=<span class="kw">None</span>, pasta=<span class="hljs-string">"figuras"</span>, formatos=(<span class="hljs-string">"png"</span>,)) <span class="ret">-&gt; list[Path]</span></pre></div>
+          <p class="fn__desc">
+            Grava a figura em <code>pasta/&lt;nome&gt;.&lt;fmt&gt;</code> (sem extensão em
+            <code>nome</code>), criando a pasta se preciso, e devolve os caminhos.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">fig, ax = plt.subplots()
+ax.plot(ns, erros)
+salvar_fig("erro_i_vs_n")                       # -&gt; figuras/erro_i_vs_n.png
+salvar_fig("erro_i_vs_n", formatos=("png", "pdf"))   # + versão vetorial</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="plot_estimativa_vs_n">plot_estimativa_vs_n</h3>
+          <div class="sig"><pre>plot_estimativa_vs_n(
+    ns, estimativas, ic_baixo=<span class="kw">None</span>, ic_alto=<span class="kw">None</span>, teorico=<span class="kw">None</span>, *,
+    label=<span class="hljs-string">"estimado"</span>, xlabel=<span class="hljs-string">"N (amostras)"</span>, ylabel=<span class="hljs-string">"bits"</span>,
+    logx=<span class="kw">True</span>, ax=<span class="kw">None</span>,
+) <span class="ret">-&gt; ax</span></pre></div>
+          <p class="fn__desc">
+            Curva de uma quantidade estimada em função do tamanho de amostra — o gráfico
+            “estimado vs teórico” dos tópicos 1 e 4. <code>ic_baixo</code>/<code>ic_alto</code>
+            viram uma faixa sombreada; <code>teorico</code> (escalar) vira linha horizontal
+            de referência (na cor <code>COR_TEORICO</code>).
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo — I(X; Y) vs N, com IC bootstrap</div>
+            <pre class="block"><code class="language-python">ns = [10, 100, 1_000, 10_000, 100_000]
+est, lo, hi = [], [], []
+for n in ns:
+    a = sample_pmf([0.5, 0.5], n, g)
+    b = bsc(a, 0.1, g)
+    e, l, h = bootstrap_ci(
+        (a, b),
+        lambda u, v: mutual_information(counts_to_joint(u, v, 2, 2)),
+        n_boot=400, generator=g,
+    )
+    est.append(e); lo.append(l); hi.append(h)
+
+plot_estimativa_vs_n(ns, est, lo, hi,
+                     teorico=1 - binary_entropy(0.1),
+                     ylabel="I(X; Y)  [bits]")
+salvar_fig("i_vs_n")</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="plot_curvas">plot_curvas</h3>
+          <div class="sig"><pre>plot_curvas(
+    data, x, y, hue=<span class="kw">None</span>, *,
+    teorico=<span class="kw">None</span>, errorbar=<span class="kw">None</span>, marker=<span class="hljs-string">"o"</span>,
+    xlabel=<span class="kw">None</span>, ylabel=<span class="kw">None</span>, ax=<span class="kw">None</span>,
+) <span class="ret">-&gt; ax</span></pre></div>
+          <p class="fn__desc">
+            <code>sns.lineplot</code> de um DataFrame no formato <em>tidy</em> (uma linha por
+            observação). <code>teorico</code> aceita escalar (linha horizontal) ou callable
+            <code>f(x) → y</code> (curva de referência). <code>errorbar</code> é repassado ao
+            seaborn — ex.: <code>("ci", 95)</code> agrega repetições.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">import pandas as pd
+# registros: um dict por (N, metodo) com chaves N, I, metodo
+df = pd.DataFrame(registros)
+
+plot_curvas(df, x="N", y="I", hue="metodo",
+            errorbar=("ci", 95),
+            teorico=lambda n: 1 / np.log2(n),
+            xlabel="N", ylabel="I(X; Y)  [bits]")</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="plot_pmf">plot_pmf</h3>
+          <div class="sig"><pre>plot_pmf(
+    p, rotulos=<span class="kw">None</span>, *,
+    comparar=<span class="kw">None</span>, nomes=(<span class="hljs-string">"empirica"</span>, <span class="hljs-string">"teorica"</span>),
+    ylabel=<span class="hljs-string">"probabilidade"</span>, ax=<span class="kw">None</span>,
+) <span class="ret">-&gt; ax</span></pre></div>
+          <p class="fn__desc">
+            Barras de uma pmf. Com <code>comparar=</code> (segundo vetor de mesmo tamanho)
+            mostra duas fontes lado a lado — a conferência “empírica vs teórica”.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">p_emp = empirical_pmf(sample_pmf([0.5, 0.3, 0.2], 500, g), size=3)
+plot_pmf(p_emp, rotulos=["a", "b", "c"],
+         comparar=[0.5, 0.3, 0.2])</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="plot_barras">plot_barras</h3>
+          <div class="sig"><pre>plot_barras(valores, *, ylabel=<span class="hljs-string">"bits"</span>, anotar=<span class="kw">True</span>, ax=<span class="kw">None</span>) <span class="ret">-&gt; ax</span></pre></div>
+          <p class="fn__desc">
+            Barras a partir de um dict <code>{nome: valor}</code>, com o valor anotado sobre
+            cada barra. Feito para comparar H(X), H(Y), H(X, Y), I(X; Y) num painel só.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">plot_barras({
+    "H(X)":   entropy(N.sum(axis=1)),
+    "H(Y)":   entropy(N.sum(axis=0)),
+    "H(X,Y)": joint_entropy(N),
+    "I(X;Y)": mutual_information(N),
+})</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="plot_entropia_binaria">plot_entropia_binaria</h3>
+          <div class="sig"><pre>plot_entropia_binaria(p_destaque=<span class="kw">None</span>, *, ax=<span class="kw">None</span>) <span class="ret">-&gt; ax</span></pre></div>
+          <p class="fn__desc">
+            Curva H<sub>b</sub>(p) no intervalo [0, 1]. Com <code>p_destaque</code>, marca o
+            ponto e traça uma vertical pontilhada — por exemplo o p de um BSC.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">plot_entropia_binaria(p_destaque=0.1)    # marca (0.1, H_b(0.1))</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="heatmap_matriz">heatmap_matriz</h3>
+          <div class="sig"><pre>heatmap_matriz(
+    M, rotulos_x=<span class="kw">None</span>, rotulos_y=<span class="kw">None</span>, *,
+    fmt=<span class="hljs-string">".2f"</span>, cmap=<span class="hljs-string">"rocket"</span>, cbar_label=<span class="kw">None</span>,
+    xlabel=<span class="hljs-string">"Y"</span>, ylabel=<span class="hljs-string">"X"</span>, ax=<span class="kw">None</span>,
+) <span class="ret">-&gt; ax</span></pre></div>
+          <p class="fn__desc">
+            Heatmap anotado de uma matriz 2D: tabela conjunta, matriz de transição de
+            Markov, matriz de confusão de um código. Convenção do projeto: linhas = X,
+            colunas = Y.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">heatmap_matriz(N / N.sum(),
+               rotulos_x=["x=0", "x=1"], rotulos_y=["y=0", "y=1"],
+               cbar_label="p(x, y)", fmt=".3f")
+
+P = np.array([[0.9, 0.1], [0.5, 0.5]])
+heatmap_matriz(P, rotulos_x=["de 0", "de 1"], rotulos_y=["para 0", "para 1"],
+               cbar_label="P(próx | atual)")</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="plot_distribuicao">plot_distribuicao</h3>
+          <div class="sig"><pre>plot_distribuicao(
+    amostras, *,
+    referencia=<span class="kw">None</span>, bins=<span class="hljs-string">"auto"</span>, kde=<span class="kw">True</span>,
+    stat=<span class="hljs-string">"density"</span>, xlabel=<span class="kw">None</span>, ax=<span class="kw">None</span>,
+) <span class="ret">-&gt; ax</span></pre></div>
+          <p class="fn__desc">
+            Histograma (com KDE) de um vetor de amostras. Pensado para as distribuições
+            empíricas das simulações: a variável −1/n·log₂ p(xⁿ) do AEP, a taxa de
+            crescimento no jogo de Kelly, os erros por bloco no canal.
+            <code>referencia</code> (escalar) vira linha vertical.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo — AEP</div>
+            <pre class="block"><code class="language-python">pmf = np.array([0.5, 0.3, 0.2])
+n = 200
+blocos = np.array([
+    -np.mean(np.log2(pmf[sample_pmf(pmf, n, g)])) for _ in range(2_000)
+])
+plot_distribuicao(blocos, referencia=entropy(pmf),
+                  xlabel="-1/n · log2 p(x^n)")
+# massa concentra em H(X) ~ 1.485 bits</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="plot_ecdf">plot_ecdf</h3>
+          <div class="sig"><pre>plot_ecdf(amostras, *, referencia=<span class="kw">None</span>, xlabel=<span class="kw">None</span>, label=<span class="kw">None</span>, ax=<span class="kw">None</span>) <span class="ret">-&gt; ax</span></pre></div>
+          <p class="fn__desc">
+            ECDF de um vetor de amostras (<code>sns.ecdfplot</code>). Sobreponha várias
+            (passando o mesmo <code>ax</code>) para ver o AEP: conforme n cresce, a ECDF de
+            −1/n·log₂ p(xⁿ) fica mais íngreme em torno de H(X).
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">setup_estilo()
+fig, ax = plt.subplots()
+pmf = np.array([0.5, 0.3, 0.2])
+for n in (10, 100, 1_000):
+    blocos = np.array([
+        -np.mean(np.log2(pmf[sample_pmf(pmf, n, g)])) for _ in range(1_000)
+    ])
+    plot_ecdf(blocos, referencia=entropy(pmf), label=f"n = {n}", ax=ax)</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="tabela">tabela</h3>
+          <div class="sig"><pre>tabela(registros, *, ordem=<span class="kw">None</span>, indice=<span class="kw">None</span>) <span class="ret">-&gt; pd.DataFrame</span></pre></div>
+          <p class="fn__desc">
+            Monta um DataFrame a partir de <code>registros</code> — lista de dicts (uma
+            linha cada), dict de colunas <code>{coluna: [valores]}</code>, ou dict de
+            escalares (uma linha). <code>ordem</code> reordena/seleciona colunas;
+            <code>indice</code> define a coluna de índice.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">tabela([{"N": 10, "H": 0.981},
+        {"N": 100, "H": 1.001}], indice="N")
+#          H
+# N
+# 10   0.981
+# 100  1.001
+
+tabela({"N": [10, 100, 1000], "I": [0.71, 0.55, 0.53]})</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="tabela_conjunta">tabela_conjunta</h3>
+          <div class="sig"><pre>tabela_conjunta(
+    joint, rotulos_x=<span class="kw">None</span>, rotulos_y=<span class="kw">None</span>, *,
+    normalizar=<span class="kw">False</span>, margens=<span class="kw">True</span>,
+) <span class="ret">-&gt; pd.DataFrame</span></pre></div>
+          <p class="fn__desc">
+            Tabela conjunta 2D como DataFrame rotulado (X nas linhas, Y nas colunas). Com
+            <code>normalizar=True</code> divide pelo total; com <code>margens=True</code>
+            acrescenta a linha e a coluna <code>total</code> (marginais).
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">tabela_conjunta(N, rotulos_x=["x=0", "x=1"], rotulos_y=["y=0", "y=1"],
+                normalizar=True).round(4)
+#           y=0     y=1   total
+# x=0    0.4488  0.0502  0.4991
+# x=1    0.0495  0.4514  0.5009
+# total  0.4984  0.5016  1.0000</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="tabela_comparacao">tabela_comparacao</h3>
+          <div class="sig"><pre>tabela_comparacao(
+    nomes, estimado, teorico, ic_baixo=<span class="kw">None</span>, ic_alto=<span class="kw">None</span>,
+) <span class="ret">-&gt; pd.DataFrame</span></pre></div>
+          <p class="fn__desc">
+            Tabela “estimado vs teórico” com erro absoluto e relativo (%). Se
+            <code>ic_baixo</code> e <code>ic_alto</code> forem dados, inclui o IC formatado
+            e a coluna booleana <code>cobre_teorico</code>. Argumentos alinhados por posição.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">tabela_comparacao(
+    ["H(X)", "I(X;Y)"],
+    estimado=[1.0000, mutual_information(N)],
+    teorico=[1.0, 1 - binary_entropy(0.1)],
+    ic_baixo=[0.9983, 0.5271], ic_alto=[1.0000, 0.5369],
+).round(4)
+#             estimado  teorico  erro_abs  erro_rel_%                IC  cobre_teorico
+# quantidade
+# H(X)          1.0000   1.0000    0.0000      0.0000  [0.9983, 1.0000]           True
+# I(X;Y)        0.5319   0.5310    0.0009      0.1670  [0.5271, 0.5369]           True</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="formata_ic">formata_ic</h3>
+          <div class="sig"><pre>formata_ic(est, baixo, alto, casas=<span class="hljs-number">4</span>) <span class="ret">-&gt; str</span></pre></div>
+          <p class="fn__desc">
+            Formata uma estimativa com IC numa string, para texto corrido do relatório.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">formata_ic(0.5319, 0.5271, 0.5369)          # -&gt; "0.5319 [0.5271, 0.5369]"
+formata_ic(*bootstrap_ci(amostra, np.mean, generator=g), casas=2)</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="df_para_markdown">df_para_markdown</h3>
+          <div class="sig"><pre>df_para_markdown(df, *, casas=<span class="hljs-number">4</span>, indice=<span class="kw">True</span>) <span class="ret">-&gt; str</span></pre></div>
+          <p class="fn__desc">
+            DataFrame → tabela em Markdown, pronta para colar no <code>relatorio.md</code>.
+            Implementação própria (não depende de <code>tabulate</code>): floats com
+            <code>casas</code> decimais, booleanos viram <code>sim</code>/<code>nao</code>.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">comp = tabela_comparacao(["H(X)", "I(X;Y)"], [1.984, 0.518], [2.0, 0.531])
+print(df_para_markdown(comp.round(4)))
+# | quantidade | estimado | teorico | erro_abs | erro_rel_% |
+# | --- | --- | --- | --- | --- |
+# | H(X)   | 1.9840 | 2.0000 | 0.0160 | 0.8000 |
+# | I(X;Y) | 0.5180 | 0.5310 | 0.0130 | 2.4482 |</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+
+        <article class="fn">
+          <h3 class="fn__name" id="salvar_tabela">salvar_tabela</h3>
+          <div class="sig"><pre>salvar_tabela(
+    df, nome, *,
+    pasta=<span class="hljs-string">"dados"</span>, formatos=(<span class="hljs-string">"csv"</span>, <span class="hljs-string">"md"</span>), casas=<span class="hljs-number">4</span>,
+) <span class="ret">-&gt; list[Path]</span></pre></div>
+          <p class="fn__desc">
+            Espelha <code>salvar_fig</code> para DataFrames: grava em
+            <code>pasta/&lt;nome&gt;.&lt;fmt&gt;</code>. Formatos aceitos: <code>csv</code>,
+            <code>md</code> (via <code>df_para_markdown</code>) e <code>tex</code>.
+          </p>
+          <div class="code" data-code>
+            <div class="code__label">exemplo</div>
+            <pre class="block"><code class="language-python">comp = tabela_comparacao(["H(X)", "I(X;Y)"], [1.0, 0.5319], [1.0, 0.5310])
+salvar_tabela(comp, "comparacao_topico1", formatos=("csv", "md", "tex"))
+# -&gt; [dados/comparacao_topico1.csv,
+#     dados/comparacao_topico1.md,
+#     dados/comparacao_topico1.tex]</code></pre>
+            <button class="copy" type="button">copiar</button>
+          </div>
+        </article>
+      </section>
+
+      <p class="footer">
+        Fonte: <code>utils/info_theory.py</code>, <code>utils/simulation.py</code>,
+        <code>utils/estimation.py</code>, <code>utils/plotting.py</code>. Os valores
+        numéricos nos exemplos foram gerados com <code>rng(20260902)</code>; réplicas de
+        bootstrap variam com <code>n_boot</code>. Reaproveite estas funções nos quatro
+        tópicos — não recopie implementação.
+      </p>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  (function () {
+    // ---- theme toggle ----
+    var root = document.documentElement;
+    var btn = document.getElementById("themeToggle");
+    function stored() { try { return localStorage.getItem("utilsref-theme"); } catch (e) { return null; } }
+    function apply(t) {
+      if (t === "light" || t === "dark") root.setAttribute("data-theme", t);
+      else root.removeAttribute("data-theme");
+    }
+    apply(stored());
+    function current() {
+      var explicit = root.getAttribute("data-theme");
+      if (explicit) return explicit;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    btn.addEventListener("click", function () {
+      var next = current() === "dark" ? "light" : "dark";
+      apply(next);
+      try { localStorage.setItem("utilsref-theme", next); } catch (e) {}
+    });
+
+    // ---- syntax highlight ----
+    if (window.hljs) {
+      document.querySelectorAll("pre.block code.language-python").forEach(function (el) {
+        try { window.hljs.highlightElement(el); } catch (e) {}
+      });
+    }
+
+    // ---- copy buttons ----
+    document.querySelectorAll(".code[data-code]").forEach(function (wrap) {
+      var b = wrap.querySelector(".copy");
+      var pre = wrap.querySelector("pre.block");
+      if (!b || !pre) return;
+      b.addEventListener("click", function () {
+        var txt = pre.innerText;
+        navigator.clipboard.writeText(txt).then(function () {
+          var old = b.textContent;
+          b.textContent = "copiado";
+          setTimeout(function () { b.textContent = old; }, 1200);
+        }).catch(function () {});
+      });
+    });
+
+    // ---- scroll-spy in the TOC ----
+    var links = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
+    var byId = {};
+    links.forEach(function (a) { byId[a.getAttribute("href").slice(1)] = a; });
+    var targets = links
+      .map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); })
+      .filter(Boolean);
+
+    var nav = document.querySelector(".toc");
+    var activeId = null;
+    function setActive(id) {
+      if (id === activeId || !byId[id]) return;
+      if (activeId && byId[activeId]) byId[activeId].classList.remove("active");
+      var a = byId[id];
+      a.classList.add("active");
+      activeId = id;
+      if (nav && nav.scrollHeight > nav.clientHeight) {
+        var above = a.offsetTop < nav.scrollTop;
+        var below = a.offsetTop + a.offsetHeight > nav.scrollTop + nav.clientHeight;
+        if (above || below) nav.scrollTop = a.offsetTop - nav.clientHeight / 2;
+      }
+    }
+    if (targets.length) setActive(targets[0].id);
+
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) setActive(en.target.id);
+        });
+      }, { rootMargin: "-10% 0px -70% 0px", threshold: 0 });
+      targets.forEach(function (t) { io.observe(t); });
+    }
+  })();
+</script>
+</body>
+</html>

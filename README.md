@@ -63,6 +63,7 @@ Instalação em **Para começar a trabalhar**.
 │   ├── simulation.py          #   amostragem de pmf, canal BSC, cadeias de Markov
 │   ├── estimation.py          #   bootstrap: estimativa + intervalo de confiança
 │   └── plotting.py            #   estilo padrão, gráficos seaborn e tabelas dos relatórios
+├── docs/utils.html           # referência das funções de utils/ com exemplos (abrir no navegador)
 ├── tests/                     # testes de sanidade do utils/
 ├── scripts/dev.py             # comandos de desenvolvimento multiplataforma
 ├── Makefile                   # atalhos (Linux/macOS) que chamam scripts/dev.py
@@ -187,6 +188,8 @@ Observações:
 - `setup_estilo()` padroniza a aparência dos gráficos; `salvar_fig("nome")` grava
   em `figuras/nome.png`; `bootstrap_ci(dados, estatística)` devolve
   `(estimativa, limite_inf, limite_sup)` para as barras de erro das curvas.
+- Referência completa das funções de `utils/` (assinaturas e exemplos):
+  abra `docs/utils.html` no navegador.
 - **Não commite notebook com saída pesada nas células** — o hook `nbstripout`
   (via `pre-commit`) limpa isso automaticamente no commit.
 
