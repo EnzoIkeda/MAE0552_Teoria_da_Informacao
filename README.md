@@ -41,8 +41,9 @@ Instalação em **Para começar a trabalhar**.
 │   ├── estimation.py          #   bootstrap: estimativa + intervalo de confiança
 │   └── plotting.py            #   estilo padrão dos gráficos e salvamento de figuras
 ├── tests/                     # testes de sanidade do utils/
+├── scripts/                   # utilitários do repo (ex.: hook que barra push na main)
 ├── Makefile                   # atalhos: make setup / test / test-notebooks / lint / lab
-├── .pre-commit-config.yaml    # hooks de commit (nbstripout, ruff)
+├── .pre-commit-config.yaml    # hooks: nbstripout, ruff, bloqueio de push na main
 ├── .github/workflows/ci.yml   # CI: lint + testes + execução dos notebooks
 └── projetos/
     ├── _template/             # esqueleto para começar uma proposta nova
@@ -78,7 +79,7 @@ python -m venv .venv
 source .venv/bin/activate           # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 pip install -e .                    # deixa `import utils...` disponível em qualquer notebook
-pre-commit install                  # ativa os hooks de commit
+pre-commit install --hook-type pre-commit --hook-type pre-push   # ativa os hooks
 ```
 
 Em Linux/macOS, `make setup` faz tudo isso de uma vez (cria o `.venv`, instala e
@@ -215,6 +216,26 @@ pelo `.gitignore` — não precisam entrar nos commits.
   conflitos de merge —, e `ruff` corrige/formata o código. Se um hook alterar
   arquivos, o commit é abortado: revise, dê `git add` de novo e recomite.
 - `.editorconfig` mantém indentação e fim de linha consistentes entre editores.
+
+### Proteção da `main`
+
+Todo trabalho entra na `main` por **Pull Request**, nunca por push direto.
+
+Um hook `pre-push` (`scripts/no-push-to-main.sh`, registrado no
+`.pre-commit-config.yaml`) recusa `git push` que atualize a `main` diretamente.
+Ele é **local**: só vale para quem instalou o hook —
+
+```bash
+pre-commit install --hook-type pre-push     # incluído no `make setup`
+```
+
+— e pode ser contornado com `git push --no-verify` numa emergência.
+
+> Proteção real no servidor (bloquear o merge sem PR para todos) depende de
+> `Settings → Branches`/`Rules` no GitHub, que exige repositório **público** ou
+> plano **GitHub Pro** — indisponível enquanto o repo for privado no plano
+> gratuito. Se isso mudar, aplicar a regra "Require a pull request before
+> merging" na branch `main`.
 
 ## Convenções
 

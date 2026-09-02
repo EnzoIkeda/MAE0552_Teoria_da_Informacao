@@ -14,7 +14,7 @@ setup:  ## Cria o venv e instala tudo (runtime + dev + pacote editavel + hooks)
 	$(PIP) install --upgrade pip
 	$(PIP) install -r requirements.txt
 	$(PIP) install -e .
-	$(BIN)/pre-commit install
+	$(BIN)/pre-commit install --hook-type pre-commit --hook-type pre-push
 
 test:  ## Roda os testes de utils/
 	$(PY) -m pytest
