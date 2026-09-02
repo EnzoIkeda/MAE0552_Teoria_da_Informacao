@@ -9,6 +9,25 @@ compartilham é o ferramental de teoria da informação em `utils/`.
 
 Desenvolvimento sempre em **Python + Jupyter Notebook**.
 
+## Atalhos (Makefile)
+
+Depois do `make setup` (ver **Para começar a trabalhar**), o dia a dia roda por
+`make` — em Linux/macOS:
+
+| Comando | O que faz |
+|---------|-----------|
+| `make setup` | cria o `.venv`, instala tudo e ativa os hooks |
+| `make test` | roda os testes de `utils/` (`pytest`) |
+| `make test-notebooks` | executa todos os notebooks e falha se algum quebrar (`nbmake`) |
+| `make lint` | `ruff check` + `ruff format --check` (não altera arquivos) |
+| `make format` | formata e corrige o que der com `ruff` |
+| `make check` | `lint` + `test` (o mesmo que o CI cobra) |
+| `make lab` | abre o JupyterLab |
+| `make clean` | remove caches (`__pycache__`, `.pytest_cache`, checkpoints, `*.egg-info`) |
+
+`make` usa `python3` para criar o `.venv`. Em outra máquina, dá para apontar o
+interpretador: `make setup PYTHON=python3.12`.
+
 ## Dependências
 
 Python **>= 3.10**. Pacotes (fixados em `requirements.txt`; os de runtime também
@@ -75,7 +94,7 @@ Uma vez por máquina (clonar e preparar o ambiente):
 git clone <url-do-repositorio>
 cd MAE0552_Teoria_da_Informacao
 
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate           # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 pip install -e .                    # deixa `import utils...` disponível em qualquer notebook
@@ -84,6 +103,9 @@ pre-commit install --hook-type pre-commit --hook-type pre-push   # ativa os hook
 
 Em Linux/macOS, `make setup` faz tudo isso de uma vez (cria o `.venv`, instala e
 ativa os hooks).
+
+> Ubuntu/Debian: se `python3 -m venv` reclamar de `ensurepip`, instale o pacote
+> do venv — `sudo apt install python3-venv` — e rode de novo.
 
 No começo de cada sessão de trabalho:
 
@@ -192,19 +214,6 @@ git merge main                        # resolve conflitos, se houver, e commita
 
 Artefatos gerados (`dados/`, `figuras/`, `.venv/`, checkpoints) já são ignorados
 pelo `.gitignore` — não precisam entrar nos commits.
-
-## Atalhos (Makefile)
-
-| Comando | O que faz |
-|---------|-----------|
-| `make setup` | cria o `.venv`, instala tudo e ativa os hooks |
-| `make test` | roda os testes de `utils/` (`pytest`) |
-| `make test-notebooks` | executa todos os notebooks e falha se algum quebrar (`nbmake`) |
-| `make lint` | `ruff check` + `ruff format --check` (não altera arquivos) |
-| `make format` | formata e corrige o que der com `ruff` |
-| `make check` | `lint` + `test` (o mesmo que o CI cobra) |
-| `make lab` | abre o JupyterLab |
-| `make clean` | remove caches (`__pycache__`, `.pytest_cache`, checkpoints, `*.egg-info`) |
 
 ## Qualidade de código
 
