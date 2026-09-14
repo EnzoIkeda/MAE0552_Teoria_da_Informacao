@@ -1,4 +1,4 @@
-"""Tópico 4 — canal binário simétrico e códigos corretores de erro.
+"""Tópico 4: canal binário simétrico e códigos corretores de erro.
 
 Canal: `utils.simulation.bsc`. Capacidade C = 1 - H_b(p) via
 `utils.info_theory.binary_entropy`.

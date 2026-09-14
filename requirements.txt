@@ -9,6 +9,10 @@ seaborn>=0.13
 jupyterlab>=4.0
 ipykernel>=6.29
 
+# Relatórios (scripts/relatorio_pdf.py: relatorio.md -> PDF)
+mistune>=3.0
+# opcional: motor de PDF sem navegador -> pip install weasyprint
+
 # Desenvolvimento (testes, lint, hooks)
 pytest>=7.0
 nbmake>=1.5

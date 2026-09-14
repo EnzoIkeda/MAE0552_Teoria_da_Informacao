@@ -1,4 +1,4 @@
-"""Tópico 3 — apostas, AEP e critério de Kelly.
+"""Tópico 3: apostas, AEP e critério de Kelly.
 
 m resultados por partida, probabilidades verdadeiras p_i, cotações o_i ("o_i
 para 1"). Estratégia = vetor b (fração do patrimônio em cada resultado,

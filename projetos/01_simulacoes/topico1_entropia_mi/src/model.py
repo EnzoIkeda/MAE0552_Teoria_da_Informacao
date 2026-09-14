@@ -1,4 +1,4 @@
-"""Tópico 1 — modelo do teste rápido de dengue.
+"""Tópico 1: modelo do teste rápido de dengue.
 
 D = estado real (0 saudável, 1 infectado); T = resultado do teste (0/1).
 O grupo escolhe: prevalência P(D=1), taxa de falso positivo P(T=1|D=0) e taxa

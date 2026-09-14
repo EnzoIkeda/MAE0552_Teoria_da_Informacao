@@ -4,7 +4,7 @@
 PYTHON ?= python3
 DEV    := $(PYTHON) scripts/dev.py
 
-.PHONY: help setup test test-notebooks lint format check lab clean
+.PHONY: help setup test test-notebooks lint format check lab clean relatorio
 
 help:  ## Lista os alvos disponiveis
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) \
@@ -30,6 +30,9 @@ check:  ## O que o CI cobra: lint + testes
 
 lab:  ## Abre o JupyterLab
 	$(DEV) lab
+
+relatorio:  ## relatorio.md -> PDF (todos, ou 'make relatorio ARGS="<caminho> --keep-html"')
+	$(DEV) relatorio $(ARGS)
 
 clean:  ## Remove caches e artefatos locais
 	$(DEV) clean

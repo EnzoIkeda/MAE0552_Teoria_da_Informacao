@@ -17,6 +17,9 @@ __pycache__/
 *.npz
 *.parquet
 
+# HTML intermediario do scripts/relatorio_pdf.py (o relatorio.pdf pode ser versionado)
+**/relatorio.html
+
 # Sistema / editores
 .DS_Store
 .idea/

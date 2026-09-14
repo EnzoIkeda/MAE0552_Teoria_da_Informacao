@@ -1,4 +1,4 @@
-# Relatório — Tópico 2: Desigualdade de Processamento de Dados e Cadeias de Markov
+# Relatório do Tópico 2: Desigualdade de Processamento de Dados e Cadeias de Markov
 
 ## Objetivo
 Comprovar por simulação que nenhuma etapa de processamento cria informação nova
