@@ -1,4 +1,4 @@
-# 01 — Primeiras simulações em grupo
+# 01: Primeiras simulações em grupo
 
 Enunciado: `propostas/1_Simulacoes.pdf`.
 

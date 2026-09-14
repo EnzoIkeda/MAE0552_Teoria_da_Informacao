@@ -1,4 +1,4 @@
-# Relatório — Tópico 1: Entropia, Informação Mútua e Teste de Independência
+# Relatório do Tópico 1: Entropia, Informação Mútua e Teste de Independência
 
 ## Objetivo
 Decidir se o teste rápido carrega informação real sobre o estado de saúde e

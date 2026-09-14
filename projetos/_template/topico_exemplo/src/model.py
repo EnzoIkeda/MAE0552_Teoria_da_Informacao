@@ -2,7 +2,7 @@
 codecs etc.
 
 As quantidades de teoria da informação (entropia, informação mútua, KL, ...)
-NÃO são reimplementadas aqui — usar `utils.info_theory`. Este arquivo cuida da
+NÃO são reimplementadas aqui: usar `utils.info_theory`. Este arquivo cuida da
 parte "montar o mundo do problema".
 """
 

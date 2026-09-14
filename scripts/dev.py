@@ -9,6 +9,7 @@
     python scripts/dev.py check           # lint + test
     python scripts/dev.py lab             # jupyter lab
     python scripts/dev.py clean           # remove caches locais
+    python scripts/dev.py relatorio [...] # relatorio.md -> PDF (repassa argumentos)
 
 No Linux/macOS o `make` chama este script; no Windows rode-o direto
 (`python scripts\\dev.py <comando>`).
@@ -77,6 +78,10 @@ def cmd_lab() -> None:
     run([venv_bin("jupyter"), "lab"])
 
 
+def cmd_relatorio(extra: list[str]) -> None:
+    run([venv_bin("python"), str(ROOT / "scripts" / "relatorio_pdf.py"), *extra])
+
+
 def cmd_clean() -> None:
     caches = {"__pycache__", ".pytest_cache", ".ipynb_checkpoints", ".ruff_cache"}
     for path in ROOT.rglob("*"):
@@ -98,16 +103,24 @@ COMMANDS = {
     "check": cmd_check,
     "lab": cmd_lab,
     "clean": cmd_clean,
+    "relatorio": cmd_relatorio,
 }
+
+# Comandos que aceitam argumentos extras (repassados adiante).
+PASSTHROUGH = {"relatorio"}
 
 
 def main(argv: list[str]) -> int:
-    if len(argv) != 1 or argv[0] not in COMMANDS:
+    if not argv or argv[0] not in COMMANDS:
         print(__doc__)
         print("comandos:", ", ".join(COMMANDS))
         return 2
+    cmd, rest = argv[0], argv[1:]
+    if rest and cmd not in PASSTHROUGH:
+        print(f"'{cmd}' nao aceita argumentos extras: {rest}")
+        return 2
     try:
-        COMMANDS[argv[0]]()
+        COMMANDS[cmd](rest) if cmd in PASSTHROUGH else COMMANDS[cmd]()
     except subprocess.CalledProcessError as exc:
         return exc.returncode or 1
     return 0

@@ -6,5 +6,5 @@ Um subprojeto independente por proposta da disciplina.
 |-------|----------------|------|--------|
 | `01_simulacoes/` | `propostas/1_Simulacoes.pdf` | Primeiras simulações em grupo (4 tópicos) | em andamento |
 
-`_template/` não é uma entrega — é o esqueleto a copiar para começar uma
+`_template/` não é uma entrega: é o esqueleto a copiar para começar uma
 proposta nova (ver README na raiz).

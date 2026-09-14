@@ -1,4 +1,4 @@
-"""Tópico 1 — modelo do teste rápido de dengue.
+"""Tópico 1: modelo do teste rápido de dengue.
 
 D = estado real (0 saudável, 1 infectado); T = resultado do teste (0/1).
 O grupo escolhe: prevalência P(D=1), taxa de falso positivo P(T=1|D=0) e taxa
@@ -29,9 +29,19 @@ def true_joint(prevalence: float, fpr: float, fnr: float) -> np.ndarray:
 def sample_pairs(joint: np.ndarray, n: int, generator) -> tuple[np.ndarray, np.ndarray]:
     """N pares (D, T): sorteia D pela marginal e T condicional a D."""
     p_d = joint.sum(axis=1)
-    p_t_given_d = joint / p_d[:, None]
-    d = generator.random(n) < p_d[1]
-    d = d.astype(int)
-    u = generator.random(n)
-    t = (u < p_t_given_d[d, 1]).astype(int)
+    d = (generator.random(n) < p_d[1]).astype(int)
+    t = sample_given_d(joint, d, generator)
     return d, t
+
+
+def sample_given_d(joint: np.ndarray, d: np.ndarray, generator) -> np.ndarray:
+    """T condicional a uma serie D ja dada (ex.: D_1..D_n de `markov_chain`).
+
+    Usa a mesma conjunta `joint` so para extrair p(t | d); diferente de
+    `sample_pairs`, D nao precisa ser i.i.d. -- ele vem pronto de fora.
+    """
+    p_d = joint.sum(axis=1)
+    p_t_given_d = joint / p_d[:, None]
+    d = np.asarray(d).astype(int)
+    u = generator.random(d.shape)
+    return (u < p_t_given_d[d, 1]).astype(int)

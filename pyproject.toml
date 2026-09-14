@@ -23,6 +23,7 @@ dev = [
     "ruff>=0.6",
     "nbmake>=1.5",
     "ipykernel>=6.29",
+    "mistune>=3.0",
 ]
 
 # Apenas o pacote compartilhado `utils` e instalavel/importavel em qualquer

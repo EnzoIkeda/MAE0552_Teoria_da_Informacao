@@ -1,10 +1,10 @@
-# MAE0552 — Teoria da Informação
+# MAE0552: Teoria da Informação
 
 [![CI](https://github.com/EnzoIkeda/MAE0552_Teoria_da_Informacao/actions/workflows/ci.yml/badge.svg)](https://github.com/EnzoIkeda/MAE0552_Teoria_da_Informacao/actions/workflows/ci.yml)
 
 Repositório do grupo para as atividades práticas da disciplina. Cada **proposta**
 entregue ao longo do semestre vira um subprojeto independente dentro de
-`projetos/`. As propostas não têm necessariamente a mesma finalidade — o que elas
+`projetos/`. As propostas não têm necessariamente a mesma finalidade; o que elas
 compartilham é o ferramental de teoria da informação em `utils/`.
 
 Desenvolvimento sempre em **Python + Jupyter Notebook**.
@@ -24,6 +24,7 @@ Os mesmos comandos em qualquer sistema operacional. Em **Linux/macOS** use
 | `make format` | `... format` | formata e corrige o que der com `ruff` |
 | `make check` | `... check` | `lint` + `test` (o mesmo que o CI cobra) |
 | `make lab` | `... lab` | abre o JupyterLab |
+| `make relatorio` | `... relatorio` | converte os `relatorio.md` em PDF (ver **Relatórios em PDF**) |
 | `make clean` | `... clean` | remove caches (`__pycache__`, `.pytest_cache`, checkpoints, `*.egg-info`) |
 
 Rode o `setup` com o Python do sistema (`python3` no Linux/macOS, `python` no
@@ -38,7 +39,7 @@ em `pyproject.toml`):
 
 | Pacote | Versão | Para quê |
 |--------|--------|----------|
-| `numpy` | >= 1.24 | arrays, gerador aleatório, álgebra vetorial — base de tudo |
+| `numpy` | >= 1.24 | arrays, gerador aleatório, álgebra vetorial (base de tudo) |
 | `scipy` | >= 1.10 | conferências independentes (`scipy.stats`: `chi2`, `binom`, ...) |
 | `matplotlib` | >= 3.6 | gráficos dos relatórios |
 | `seaborn` | >= 0.13 | camada de alto nível dos gráficos (curvas com IC, heatmaps, barras) |
@@ -49,6 +50,7 @@ em `pyproject.toml`):
 | `nbmake` | >= 1.5 | executar os notebooks de ponta a ponta no CI |
 | `ruff` | >= 0.6 | lint + formatação do código Python |
 | `pre-commit` | >= 3.5 | hooks de commit (limpa notebook, roda `ruff`) |
+| `mistune` | >= 3.0 | Markdown → HTML em `scripts/relatorio_pdf.py` (`relatorio.md` → PDF) |
 
 Instalação em **Para começar a trabalhar**.
 
@@ -65,13 +67,15 @@ Instalação em **Para começar a trabalhar**.
 │   └── plotting.py            #   estilo padrão, gráficos seaborn e tabelas dos relatórios
 ├── docs/utils.html           # referência das funções de utils/ com exemplos (abrir no navegador)
 ├── tests/                     # testes de sanidade do utils/
-├── scripts/dev.py             # comandos de desenvolvimento multiplataforma
+├── scripts/
+│   ├── dev.py                 #   comandos de desenvolvimento multiplataforma
+│   └── relatorio_pdf.py       #   relatorio.md -> PDF (Markdown + math + figuras)
 ├── Makefile                   # atalhos (Linux/macOS) que chamam scripts/dev.py
 ├── .pre-commit-config.yaml    # hooks: nbstripout, ruff, sem commit direto na main
 ├── .github/workflows/ci.yml   # CI: lint + testes + execução dos notebooks
 └── projetos/
     ├── _template/             # esqueleto para começar uma proposta nova
-    └── 01_simulacoes/         # propostas/1_Simulacoes.pdf — 4 tópicos
+    └── 01_simulacoes/         # propostas/1_Simulacoes.pdf (4 tópicos)
         ├── topico1_entropia_mi/
         ├── topico2_dpi_markov/
         ├── topico3_aep_kelly/
@@ -126,7 +130,7 @@ pre-commit install
 </details>
 
 > Ubuntu/Debian: se `python3 -m venv` reclamar de `ensurepip`, instale o pacote
-> do venv — `sudo apt install python3-venv` — e rode de novo.
+> do venv (`sudo apt install python3-venv`) e rode de novo.
 > Windows: instale o Python de python.org (marque "Add python.exe to PATH") ou
 > pela Microsoft Store; use `python` / `py -3`, não `python3`.
 
@@ -140,7 +144,7 @@ jupyter lab                          # ou: make lab
 ```
 
 Ao terminar um trecho de trabalho: `git add` / `git commit` / `git push`
-(ver **Git — fluxo básico**) e abrir um Pull/Merge Request para integrar na `main`.
+(ver **Git: fluxo básico**) e abrir um Pull/Merge Request para integrar na `main`.
 
 ## Início dos notebooks
 
@@ -190,10 +194,10 @@ Observações:
   `(estimativa, limite_inf, limite_sup)` para as barras de erro das curvas.
 - Referência completa das funções de `utils/` (assinaturas e exemplos):
   abra `docs/utils.html` no navegador.
-- **Não commite notebook com saída pesada nas células** — o hook `nbstripout`
+- **Não commite notebook com saída pesada nas células**: o hook `nbstripout`
   (via `pre-commit`) limpa isso automaticamente no commit.
 
-## Git — fluxo básico
+## Git: fluxo básico
 
 **Atualizar o repositório local** (fazer antes de começar e antes de abrir um PR):
 
@@ -238,7 +242,7 @@ git merge main                        # resolve conflitos, se houver, e commita
 ```
 
 Artefatos gerados (`dados/`, `figuras/`, `.venv/`, checkpoints) já são ignorados
-pelo `.gitignore` — não precisam entrar nos commits.
+pelo `.gitignore`; não precisam entrar nos commits.
 
 ## Qualidade de código
 
@@ -246,8 +250,8 @@ pelo `.gitignore` — não precisam entrar nos commits.
   (configuração em `pyproject.toml`; notebooks e `.md` ficam de fora). Rode
   `make format` antes de commitar, ou deixe o `pre-commit` fazer.
 - **`pre-commit`** roda a cada `git commit` (depois de `pre-commit install`, feito
-  pelo `setup`): `nbstripout` limpa a saída das células dos notebooks — evita
-  diffs enormes e conflitos de merge —, e `ruff` corrige/formata o código. Se um
+  pelo `setup`): `nbstripout` limpa a saída das células dos notebooks (evita
+  diffs enormes e conflitos de merge), e `ruff` corrige/formata o código. Se um
   hook alterar arquivos, o commit é abortado: revise, dê `git add` de novo e
   recomite. Todos os hooks são multiplataforma (Windows/Linux/macOS).
 - `.editorconfig` mantém indentação e fim de linha consistentes entre editores.
@@ -257,14 +261,14 @@ pelo `.gitignore` — não precisam entrar nos commits.
 Todo trabalho entra na `main` por **Pull Request**, nunca por commit direto.
 
 O hook `no-commit-to-branch` (em `.pre-commit-config.yaml`) recusa `git commit`
-feito com a `main` em checkout — força criar um branch antes. É **local**: só
+feito com a `main` em checkout; força criar um branch antes. É **local**: só
 vale para quem rodou o `setup`/`pre-commit install`, e pode ser contornado com
 `git commit --no-verify` numa emergência.
 
 > Proteção real no servidor (impedir o merge sem PR para todos, inclusive pela
 > interface web) depende de `Settings → Branches`/`Rules` no GitHub, que exige
-> repositório **público** ou plano **GitHub Pro** — indisponível enquanto o repo
-> for privado no plano gratuito. Se isso mudar, aplicar a regra "Require a pull
+> repositório **público** ou plano **GitHub Pro** (indisponível enquanto o repo
+> for privado no plano gratuito). Se isso mudar, aplicar a regra "Require a pull
 > request before merging" na branch `main`.
 
 ## Convenções
@@ -283,6 +287,30 @@ vale para quem rodou o `setup`/`pre-commit install`, e pode ser contornado com
   para resultados reproduzíveis.
 - Cuidado com viés de amostra finita ao interpretar informação mútua estimada
   (amostras pequenas superestimam I; o alfabeto também influencia).
+
+## Relatórios em PDF
+
+`scripts/relatorio_pdf.py` converte um `relatorio.md` em PDF. O caminho é
+Markdown → HTML autocontido → PDF, tudo offline:
+
+| Comando | O que faz |
+|---------|-----------|
+| `make relatorio` | converte todos os `projetos/**/relatorio.md` (menos o `_template`) |
+| `make relatorio ARGS="projetos/01_simulacoes/topico1_entropia_mi"` | só a pasta indicada |
+| `python scripts/relatorio_pdf.py caminho/relatorio.md -o saida.pdf` | um arquivo, saída explícita |
+
+- No Windows/sem `make`: `python scripts\dev.py relatorio [...]`.
+- O PDF sai ao lado do `.md` (`relatorio.pdf`). `--keep-html` mantém o HTML
+  intermediário; `--engine {auto,weasyprint,chrome,html}` força o motor.
+- **Matemática**: `$ ... $` (inline) e `$$ ... $$` (bloco) são pré-renderizados
+  com o `matplotlib` (subconjunto do LaTeX do `mathtext`: `\sum`, `\frac`,
+  `\log_2`, `\leq`, greek, ...). Cifrão literal: escreva `\$`.
+- **Figuras**: caminhos relativos (`figuras/erro_i_vs_n.png`) são embutidos em
+  base64. Gere as figuras antes (`salvar_fig(...)` no notebook).
+- **Motor de PDF** (`--engine auto`): usa `weasyprint` se instalado
+  (`pip install weasyprint`, adiciona número de página); senão um Chromium
+  headless (Google Chrome / Microsoft Edge); senão grava só o `.html` para
+  imprimir pelo navegador.
 
 ## Como adicionar uma proposta nova
 
@@ -312,7 +340,7 @@ Pull Request, em três jobs:
 |-----|----------------|
 | `lint` | `ruff check` + `ruff format --check` |
 | `testes` | `pytest` em Python 3.10, 3.11 e 3.12 |
-| `notebooks` | `pytest --nbmake` — todos os notebooks executam sem erro |
+| `notebooks` | `pytest --nbmake`: todos os notebooks executam sem erro |
 
 O status aparece no badge no topo deste README e na aba **Actions**; um PR com o
 CI vermelho não deve ser integrado à `main`.

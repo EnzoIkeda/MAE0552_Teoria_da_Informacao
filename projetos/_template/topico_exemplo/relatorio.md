@@ -1,4 +1,4 @@
-# Relatório — <tópico>
+# Relatório do <tópico>
 
 ## Objetivo
 O que a atividade pergunta, em uma ou duas frases.

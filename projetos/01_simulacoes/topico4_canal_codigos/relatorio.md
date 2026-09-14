@@ -1,4 +1,4 @@
-# Relatório — Tópico 4: Capacidade de Canal e Códigos Corretores de Erro
+# Relatório do Tópico 4: Capacidade de Canal e Códigos Corretores de Erro
 
 ## Objetivo
 Testar na prática os limites e as promessas do teorema da codificação de canal

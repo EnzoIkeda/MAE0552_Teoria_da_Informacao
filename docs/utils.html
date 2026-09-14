@@ -490,7 +490,7 @@ GEN = rng(20260902)                           # seed fixo -&gt; reprodutível</c
     <main class="content">
 
       <div class="code" data-code style="margin-bottom:2.6rem">
-        <div class="code__label">exemplo-base — reutilizado nos exemplos desta página</div>
+        <div class="code__label">exemplo-base: reutilizado nos exemplos desta página</div>
         <pre class="block"><code class="language-python">g = rng(20260902)
 x = sample_pmf([0.5, 0.5], 100_000, g)       # fonte binária uniforme
 y = bsc(x, 0.1, g)                           # canal binário simétrico, p = 0.1
@@ -506,7 +506,7 @@ N = counts_to_joint(x, y, size_x=2, size_y=2)
           <h2 class="module__name">info_theory <span class="module__file">utils/info_theory.py</span></h2>
           <p class="module__intro">
             Entropia, entropias conjunta e condicional, entropia cruzada, divergência de
-            Kullback–Leibler e informação mútua — todas a partir da definição, em bits.
+            Kullback–Leibler e informação mútua, todas a partir da definição, em bits.
             Recebem vetores de probabilidade <em>ou</em> de contagens; com
             <code>normalize=True</code> (padrão) a normalização é feita antes do cálculo.
           </p>
@@ -522,7 +522,7 @@ N = counts_to_joint(x, y, size_x=2, size_y=2)
           </p>
           <dl class="params">
             <dt>p</dt><dd>array de contagens/pesos ≥ 0.</dd>
-            <dt>axis</dt><dd><code>None</code> normaliza pelo total do array inteiro; um eixo normaliza ao longo dele — útil para obter <code>p(y | x)</code> de uma tabela conjunta.</dd>
+            <dt>axis</dt><dd><code>None</code> normaliza pelo total do array inteiro; um eixo normaliza ao longo dele, útil para obter <code>p(y | x)</code> de uma tabela conjunta.</dd>
           </dl>
           <div class="code" data-code>
             <div class="code__label">exemplo</div>
@@ -823,7 +823,7 @@ env = sample_pmf([0.5, 0.5], 200_000, g)
             Sequência de <code>n</code> estados de uma cadeia de Markov com matriz de
             transição <code>P</code>, onde <code>P[i, j] = P(próximo = j | atual = i)</code>.
             Se <code>x0</code> é <code>None</code>, o estado inicial é uniforme. Laço
-            explícito — transparente para poucos estados.
+            explícito, transparente para poucos estados.
           </p>
           <div class="code" data-code>
             <div class="code__label">exemplo</div>
@@ -845,7 +845,7 @@ empirical_pmf(markov_chain(P, 100_000, g), size=2)   # -&gt; array([~0.83, ~0.17
           <h2 class="module__name">estimation <span class="module__file">utils/estimation.py</span></h2>
           <p class="module__intro">
             Uma função. Reamostragem <em>bootstrap</em> (método do percentil) para pôr
-            barra de erro em qualquer estatística — inclusive as de <code>info_theory</code>.
+            barra de erro em qualquer estatística, inclusive as de <code>info_theory</code>.
             Todos os tópicos comparam “estimado vs teórico” e precisam dessa incerteza.
           </p>
         </div>
@@ -862,13 +862,13 @@ empirical_pmf(markov_chain(P, 100_000, g), size=2)   # -&gt; array([~0.83, ~0.17
             original mais os limites do intervalo de <code>ci</code>%.
           </p>
           <dl class="params">
-            <dt>data</dt><dd>um array, ou uma tupla de arrays de mesmo tamanho (ex.: <code>(x, y)</code>). Com tupla e <code>paired=True</code>, cada réplica usa os <em>mesmos</em> índices em todos os arrays — preserva a dependência entre colunas.</dd>
+            <dt>data</dt><dd>um array, ou uma tupla de arrays de mesmo tamanho (ex.: <code>(x, y)</code>). Com tupla e <code>paired=True</code>, cada réplica usa os <em>mesmos</em> índices em todos os arrays, preservando a dependência entre colunas.</dd>
             <dt>statistic</dt><dd><code>statistic(sample)</code> ou <code>statistic(*samples)</code> → <code>float</code>.</dd>
             <dt>ci</dt><dd>nível em %, ex.: <code>95</code> → percentis 2.5 e 97.5.</dd>
             <dt>generator</dt><dd>use um <code>rng(seed)</code> para reprodutibilidade.</dd>
           </dl>
           <div class="code" data-code>
-            <div class="code__label">exemplo — IC para a entropia estimada</div>
+            <div class="code__label">exemplo: IC para a entropia estimada</div>
             <pre class="block"><code class="language-python">amostra = sample_pmf([0.5, 0.5], 2000, g)
 bootstrap_ci(amostra,
              lambda s: entropy(empirical_pmf(s, 2)),
@@ -877,12 +877,12 @@ bootstrap_ci(amostra,
             <button class="copy" type="button">copiar</button>
           </div>
           <div class="code" data-code>
-            <div class="code__label">exemplo — bootstrap pareado para I(X; Y)</div>
+            <div class="code__label">exemplo: bootstrap pareado para I(X; Y)</div>
             <pre class="block"><code class="language-python">def i_hat(a, b):
     return mutual_information(counts_to_joint(a, b, 2, 2))
 
 bootstrap_ci((x[:2000], y[:2000]), i_hat, generator=g)
-# -&gt; (0.575, 0.531, 0.621)   aprox. — depende de n_boot e do seed</code></pre>
+# -&gt; (0.575, 0.531, 0.621)   aprox., depende de n_boot e do seed</code></pre>
             <button class="copy" type="button">copiar</button>
           </div>
         </article>
@@ -922,7 +922,7 @@ setup_estilo({"figure.figsize": (9, 3)})      # ajuste pontual de rcParams</code
           <h3 class="fn__name" id="cores">cores</h3>
           <div class="sig"><pre>cores(n, paleta=<span class="hljs-string">"deep"</span>) <span class="ret">-&gt; list</span></pre></div>
           <p class="fn__desc">
-            Lista de <code>n</code> cores distintas de uma paleta nomeada do seaborn — para
+            Lista de <code>n</code> cores distintas de uma paleta nomeada do seaborn, para
             colorir manualmente várias séries.
           </p>
           <div class="code" data-code>
@@ -960,13 +960,13 @@ salvar_fig("erro_i_vs_n", formatos=("png", "pdf"))   # + versão vetorial</code>
     logx=<span class="kw">True</span>, ax=<span class="kw">None</span>,
 ) <span class="ret">-&gt; ax</span></pre></div>
           <p class="fn__desc">
-            Curva de uma quantidade estimada em função do tamanho de amostra — o gráfico
+            Curva de uma quantidade estimada em função do tamanho de amostra: o gráfico
             “estimado vs teórico” dos tópicos 1 e 4. <code>ic_baixo</code>/<code>ic_alto</code>
             viram uma faixa sombreada; <code>teorico</code> (escalar) vira linha horizontal
             de referência (na cor <code>COR_TEORICO</code>).
           </p>
           <div class="code" data-code>
-            <div class="code__label">exemplo — I(X; Y) vs N, com IC bootstrap</div>
+            <div class="code__label">exemplo: I(X; Y) vs N, com IC bootstrap</div>
             <pre class="block"><code class="language-python">ns = [10, 100, 1_000, 10_000, 100_000]
 est, lo, hi = [], [], []
 for n in ns:
@@ -998,7 +998,7 @@ salvar_fig("i_vs_n")</code></pre>
             <code>sns.lineplot</code> de um DataFrame no formato <em>tidy</em> (uma linha por
             observação). <code>teorico</code> aceita escalar (linha horizontal) ou callable
             <code>f(x) → y</code> (curva de referência). <code>errorbar</code> é repassado ao
-            seaborn — ex.: <code>("ci", 95)</code> agrega repetições.
+            seaborn, ex.: <code>("ci", 95)</code> agrega repetições.
           </p>
           <div class="code" data-code>
             <div class="code__label">exemplo</div>
@@ -1023,7 +1023,7 @@ plot_curvas(df, x="N", y="I", hue="metodo",
 ) <span class="ret">-&gt; ax</span></pre></div>
           <p class="fn__desc">
             Barras de uma pmf. Com <code>comparar=</code> (segundo vetor de mesmo tamanho)
-            mostra duas fontes lado a lado — a conferência “empírica vs teórica”.
+            mostra duas fontes lado a lado, a conferência “empírica vs teórica”.
           </p>
           <div class="code" data-code>
             <div class="code__label">exemplo</div>
@@ -1058,7 +1058,7 @@ plot_pmf(p_emp, rotulos=["a", "b", "c"],
           <div class="sig"><pre>plot_entropia_binaria(p_destaque=<span class="kw">None</span>, *, ax=<span class="kw">None</span>) <span class="ret">-&gt; ax</span></pre></div>
           <p class="fn__desc">
             Curva H<sub>b</sub>(p) no intervalo [0, 1]. Com <code>p_destaque</code>, marca o
-            ponto e traça uma vertical pontilhada — por exemplo o p de um BSC.
+            ponto e traça uma vertical pontilhada, por exemplo o p de um BSC.
           </p>
           <div class="code" data-code>
             <div class="code__label">exemplo</div>
@@ -1106,7 +1106,7 @@ heatmap_matriz(P, rotulos_x=["de 0", "de 1"], rotulos_y=["para 0", "para 1"],
             <code>referencia</code> (escalar) vira linha vertical.
           </p>
           <div class="code" data-code>
-            <div class="code__label">exemplo — AEP</div>
+            <div class="code__label">exemplo: AEP</div>
             <pre class="block"><code class="language-python">pmf = np.array([0.5, 0.3, 0.2])
 n = 200
 blocos = np.array([
@@ -1145,7 +1145,7 @@ for n in (10, 100, 1_000):
           <h3 class="fn__name" id="tabela">tabela</h3>
           <div class="sig"><pre>tabela(registros, *, ordem=<span class="kw">None</span>, indice=<span class="kw">None</span>) <span class="ret">-&gt; pd.DataFrame</span></pre></div>
           <p class="fn__desc">
-            Monta um DataFrame a partir de <code>registros</code> — lista de dicts (uma
+            Monta um DataFrame a partir de <code>registros</code>: lista de dicts (uma
             linha cada), dict de colunas <code>{coluna: [valores]}</code>, ou dict de
             escalares (uma linha). <code>ordem</code> reordena/seleciona colunas;
             <code>indice</code> define a coluna de índice.
@@ -1275,7 +1275,7 @@ salvar_tabela(comp, "comparacao_topico1", formatos=("csv", "md", "tex"))
         <code>utils/estimation.py</code>, <code>utils/plotting.py</code>. Os valores
         numéricos nos exemplos foram gerados com <code>rng(20260902)</code>; réplicas de
         bootstrap variam com <code>n_boot</code>. Reaproveite estas funções nos quatro
-        tópicos — não recopie implementação.
+        tópicos; não recopie implementação.
       </p>
     </main>
   </div>

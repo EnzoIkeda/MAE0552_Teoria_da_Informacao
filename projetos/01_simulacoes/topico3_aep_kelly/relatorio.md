@@ -1,4 +1,4 @@
-# Relatório — Tópico 3: Compressão de Dados, AEP e Critério de Kelly
+# Relatório do Tópico 3: Compressão de Dados, AEP e Critério de Kelly
 
 ## Objetivo
 Mostrar a relação entre entropia e a taxa ótima de crescimento de patrimônio

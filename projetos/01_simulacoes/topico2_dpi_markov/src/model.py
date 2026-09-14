@@ -1,4 +1,4 @@
-"""Tópico 2 — cadeia de canais ruidosos e "telefone sem fio".
+"""Tópico 2: cadeia de canais ruidosos e "telefone sem fio".
 
 X -> Y1 -> Y2 -> ... -> Yk, cada elo um canal binário simétrico independente.
 A desigualdade de processamento de dados prevê I(X; Y1) >= I(X; Y2) >= ...
@@ -27,7 +27,7 @@ def compose_bsc_chain(x_bits: np.ndarray, p_list, generator) -> list[np.ndarray]
 
 
 def class_conditional_gaussian(labels: np.ndarray, means, sigma: float, generator) -> np.ndarray:
-    """Passo 7: "imagem" simplificada — vetor gaussiano cuja média depende da classe.
+    """Passo 7: "imagem" simplificada, vetor gaussiano cuja média depende da classe.
 
     `means` tem shape (n_classes, dim); retorna array (len(labels), dim).
     """
