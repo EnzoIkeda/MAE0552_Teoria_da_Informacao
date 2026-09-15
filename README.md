@@ -9,6 +9,57 @@ compartilham é o ferramental de teoria da informação em `utils/`.
 
 Desenvolvimento sempre em **Python + Jupyter Notebook**.
 
+## Para começar a trabalhar
+
+Uma vez por máquina (clonar e preparar o ambiente):
+
+```bash
+git clone <url-do-repositorio>
+cd MAE0552_Teoria_da_Informacao
+```
+
+Depois, **um único comando** cria o `.venv`, instala tudo e ativa os hooks:
+
+| Sistema | Comando |
+|---------|---------|
+| Linux/macOS | `make setup` |
+| Windows | `python scripts\dev.py setup` |
+| Qualquer (sem `make`) | `python3 scripts/dev.py setup` |
+
+<details>
+<summary>Passo a passo manual (se preferir não usar o script)</summary>
+
+```bash
+# 1) criar e ativar o ambiente virtual
+python3 -m venv .venv                 # Windows: py -3 -m venv .venv
+source .venv/bin/activate             # bash/zsh (Linux/macOS)
+# .venv\Scripts\Activate.ps1          # PowerShell (Windows)
+# .venv\Scripts\activate.bat          # cmd.exe (Windows)
+
+# 2) instalar dependências + o pacote utils + os hooks de commit
+pip install -r requirements.txt
+pip install -e .
+pre-commit install
+```
+</details>
+
+> Ubuntu/Debian: se `python3 -m venv` reclamar de `ensurepip`, instale o pacote
+> do venv (`sudo apt install python3-venv`) e rode de novo.
+> Windows: instale o Python de python.org (marque "Add python.exe to PATH") ou
+> pela Microsoft Store; use `python` / `py -3`, não `python3`.
+
+No começo de cada sessão de trabalho (ative o `.venv` conforme o seu shell):
+
+```bash
+source .venv/bin/activate            # Windows: .venv\Scripts\Activate.ps1
+git switch main && git pull          # traz o que os colegas subiram
+git switch -c minha-tarefa           # trabalha sempre em um branch, nunca direto na main
+make lab                             # abre o JupyterLab (atalho; ou "jupyter lab" direto)
+```
+
+Ao terminar um trecho de trabalho: `git add` / `git commit` / `git push`
+(ver **Git: fluxo básico**) e abrir um Pull/Merge Request para integrar na `main`.
+
 ## Atalhos
 
 Os mesmos comandos em qualquer sistema operacional. Em **Linux/macOS** use
@@ -94,57 +145,6 @@ topicoN_xxx/
 ├── figuras/               # gráficos exportados (não versionado)
 └── relatorio.md           # relatório curto pedido no enunciado
 ```
-
-## Para começar a trabalhar
-
-Uma vez por máquina (clonar e preparar o ambiente):
-
-```bash
-git clone <url-do-repositorio>
-cd MAE0552_Teoria_da_Informacao
-```
-
-Depois, **um único comando** cria o `.venv`, instala tudo e ativa os hooks:
-
-| Sistema | Comando |
-|---------|---------|
-| Linux/macOS | `make setup` |
-| Windows | `python scripts\dev.py setup` |
-| Qualquer (sem `make`) | `python3 scripts/dev.py setup` |
-
-<details>
-<summary>Passo a passo manual (se preferir não usar o script)</summary>
-
-```bash
-# 1) criar e ativar o ambiente virtual
-python3 -m venv .venv                 # Windows: py -3 -m venv .venv
-source .venv/bin/activate             # bash/zsh (Linux/macOS)
-# .venv\Scripts\Activate.ps1          # PowerShell (Windows)
-# .venv\Scripts\activate.bat          # cmd.exe (Windows)
-
-# 2) instalar dependências + o pacote utils + os hooks de commit
-pip install -r requirements.txt
-pip install -e .
-pre-commit install
-```
-</details>
-
-> Ubuntu/Debian: se `python3 -m venv` reclamar de `ensurepip`, instale o pacote
-> do venv (`sudo apt install python3-venv`) e rode de novo.
-> Windows: instale o Python de python.org (marque "Add python.exe to PATH") ou
-> pela Microsoft Store; use `python` / `py -3`, não `python3`.
-
-No começo de cada sessão de trabalho (ative o `.venv` conforme o seu shell):
-
-```bash
-source .venv/bin/activate            # Windows: .venv\Scripts\Activate.ps1
-git switch main && git pull          # traz o que os colegas subiram
-git switch -c minha-tarefa           # trabalha sempre em um branch, nunca direto na main
-jupyter lab                          # ou: make lab
-```
-
-Ao terminar um trecho de trabalho: `git add` / `git commit` / `git push`
-(ver **Git: fluxo básico**) e abrir um Pull/Merge Request para integrar na `main`.
 
 ## Início dos notebooks
 
