@@ -54,7 +54,7 @@ No começo de cada sessão de trabalho (ative o `.venv` conforme o seu shell):
 source .venv/bin/activate            # Windows: .venv\Scripts\Activate.ps1
 git switch main && git pull          # traz o que os colegas subiram
 git switch -c minha-tarefa           # trabalha sempre em um branch, nunca direto na main
-make lab                             # abre o JupyterLab (atalho; ou "jupyter lab" direto)
+make lab                             # abre o JupyterLab (sem make: python scripts\dev.py lab)
 ```
 
 Ao terminar um trecho de trabalho: `git add` / `git commit` / `git push`
