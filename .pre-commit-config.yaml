@@ -18,15 +18,21 @@ repos:
 
   # Tira o output das celulas dos notebooks antes do commit:
   # evita diffs enormes e conflitos de merge em arquivos .ipynb.
+  # `conteudos/` fica de fora: sao notebooks de referencia de terceiros, nao
+  # nossos, e o output original deles faz parte do material.
   - repo: https://github.com/kynan/nbstripout
     rev: 0.8.1
     hooks:
       - id: nbstripout
+        exclude: ^conteudos/
 
-  # Lint + format do codigo Python (utils/, tests/, src/).
+  # Lint + format do codigo Python (utils/, tests/, src/). `conteudos/` fica de
+  # fora pelo mesmo motivo: material de referencia de terceiros.
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.16.5
     hooks:
       - id: ruff
         args: ["--fix"]
+        exclude: ^conteudos/
       - id: ruff-format
+        exclude: ^conteudos/

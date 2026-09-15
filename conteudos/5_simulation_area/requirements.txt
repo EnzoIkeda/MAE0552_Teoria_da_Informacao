@@ -1,0 +1,14 @@
+# Packages needed by the Chapter 2 notebooks.
+# Ranges, not exact pins: this file is meant to install on any recent macOS
+# (Intel or Apple Silicon) with Python 3.10 or newer.
+#
+# For an exact, byte-for-byte reproduction of a working environment, use
+# requirements-lock.txt instead. setup_env.sh writes that file for you.
+
+numpy>=1.26,<3
+scipy>=1.11,<2
+matplotlib>=3.8,<4
+
+jupyterlab>=4.1,<5
+ipykernel>=6.25,<7
+ipywidgets>=8.1,<9
