@@ -76,3 +76,30 @@ def markov_chain(P, n, generator=None, x0=None):
     for t in range(1, n):
         states[t] = g.choice(k, p=P[states[t - 1]])
     return states
+
+
+def stationary_distribution(P):
+    """Distribuicao estacionaria pi de uma cadeia de Markov: pi P = pi, sum(pi) = 1.
+
+    Resolve o sistema linear diretamente (transposta menos identidade, mais a
+    linha da normalizacao) em vez de iterar a cadeia ate convergir: para poucos
+    estados e exato e nao depende de escolher um criterio de parada.
+
+    Iniciar `markov_chain` em um estado sorteado por essa distribuicao deixa o
+    processo estacionario desde o primeiro passo. Sem isso, H(X_1) reflete a
+    condicao inicial arbitraria e nao o regime da cadeia, o que distorce
+    qualquer comparacao entre o custo de transmitir a sequencia e n * H(X_1).
+    """
+    P = np.asarray(P, dtype=float)
+    if P.ndim != 2 or P.shape[0] != P.shape[1]:
+        raise ValueError("P precisa ser uma matriz quadrada")
+    if not np.allclose(P.sum(axis=1), 1.0):
+        raise ValueError("cada linha de P precisa somar 1")
+    k = P.shape[0]
+    A = np.vstack([P.T - np.eye(k), np.ones(k)])
+    b = np.concatenate([np.zeros(k), [1.0]])
+    pi, *_ = np.linalg.lstsq(A, b, rcond=None)
+    if np.any(pi < -1e-9):
+        raise ValueError("cadeia sem distribuicao estacionaria nao negativa unica")
+    pi = np.clip(pi, 0.0, None)
+    return pi / pi.sum()
