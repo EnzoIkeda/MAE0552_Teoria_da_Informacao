@@ -34,3 +34,26 @@ def class_conditional_gaussian(labels: np.ndarray, means, sigma: float, generato
     means = np.asarray(means, dtype=float)
     base = means[np.asarray(labels).astype(int)]
     return base + sigma * generator.standard_normal(base.shape)
+
+
+def compress_mean_blocks(x: np.ndarray, factor: int) -> np.ndarray:
+    """Passo 7: compressão por média de blocos de coordenadas.
+
+    Divide o último eixo de `x` em blocos de tamanho `factor` e substitui cada
+    bloco pela média, reduzindo a dimensão por esse fator (a dimensão original
+    precisa ser múltipla de `factor`).
+    """
+    x = np.asarray(x, dtype=float)
+    dim = x.shape[-1]
+    if dim % factor != 0:
+        raise ValueError("a dimensao precisa ser multipla de `factor`")
+    blocks = x.reshape(*x.shape[:-1], dim // factor, factor)
+    return blocks.mean(axis=-1)
+
+
+def nearest_mean_predict(x: np.ndarray, means: np.ndarray) -> np.ndarray:
+    """Passo 7: classifica cada linha de `x` pela média de classe mais próxima (distância)."""
+    x = np.asarray(x, dtype=float)
+    means = np.asarray(means, dtype=float)
+    dists = np.linalg.norm(x[:, None, :] - means[None, :, :], axis=-1)
+    return np.argmin(dists, axis=1)
