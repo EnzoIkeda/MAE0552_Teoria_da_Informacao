@@ -45,3 +45,61 @@ def sample_given_d(joint: np.ndarray, d: np.ndarray, generator) -> np.ndarray:
     d = np.asarray(d).astype(int)
     u = generator.random(d.shape)
     return (u < p_t_given_d[d, 1]).astype(int)
+
+
+# --------------------------------------------------------- valores exatos ---
+# Quando D segue uma cadeia de Markov e T depende so de D no mesmo dia, o par
+# (D, T) e um modelo oculto de Markov: T sozinho NAO e uma cadeia de Markov.
+# As funcoes abaixo calculam as quantidades da sequencia T_1..T_n de forma
+# exata, para servir de valor teorico contra o qual conferir as estimativas por
+# contagem (e para medir o quanto a aproximacao de ordem 1 erra).
+
+
+def _p_t_given_d(joint: np.ndarray) -> np.ndarray:
+    return joint / joint.sum(axis=1)[:, None]
+
+
+def t_sequence_pmf(joint: np.ndarray, p_d: np.ndarray, n: int, pi0: np.ndarray) -> np.ndarray:
+    """p(T_1, ..., T_n) exata, como vetor de 2^n posicoes.
+
+    O indice de cada sequencia e o inteiro que ela representa em binario com
+    T_1 como bit mais significativo -- a mesma convencao usada no notebook para
+    contar as sequencias observadas, para que os dois vetores sejam comparaveis
+    posicao a posicao.
+
+    Calculada pelo algoritmo forward: `alpha[d]` acumula
+    p(t_1..t_i, D_i = d), somando sobre todos os caminhos de D.
+    """
+    p_t_d = _p_t_given_d(joint)
+    pmf = np.empty(2**n, dtype=float)
+    for codigo in range(2**n):
+        bits = [(codigo >> (n - 1 - i)) & 1 for i in range(n)]
+        alpha = np.asarray(pi0, dtype=float) * p_t_d[:, bits[0]]
+        for bit in bits[1:]:
+            alpha = (alpha @ p_d) * p_t_d[:, bit]
+        pmf[codigo] = alpha.sum()
+    return pmf
+
+
+def t_pair_joints(joint: np.ndarray, p_d: np.ndarray, n: int, pi0: np.ndarray) -> list[np.ndarray]:
+    """[p(T_1, T_2), ..., p(T_(n-1), T_n)] exatas, uma tabela 2x2 por par."""
+    p_t_d = _p_t_given_d(joint)
+    p_d_dia = [np.asarray(pi0, dtype=float)]
+    for _ in range(1, n):
+        p_d_dia.append(p_d_dia[-1] @ p_d)
+    pares = []
+    for i in range(1, n):
+        p_dd = p_d_dia[i - 1][:, None] * p_d  # p(D_(i-1), D_i)
+        pares.append(np.einsum("ab,ax,by->xy", p_dd, p_t_d, p_t_d))
+    return pares
+
+
+def t_marginals(joint: np.ndarray, p_d: np.ndarray, n: int, pi0: np.ndarray) -> list[np.ndarray]:
+    """[p(T_1), ..., p(T_n)] exatas."""
+    p_t_d = _p_t_given_d(joint)
+    p_d_dia = np.asarray(pi0, dtype=float)
+    marginais = []
+    for _ in range(n):
+        marginais.append(p_d_dia @ p_t_d)
+        p_d_dia = p_d_dia @ p_d
+    return marginais
