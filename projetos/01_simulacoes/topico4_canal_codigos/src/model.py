@@ -54,14 +54,25 @@ def hamming74_encode(bits: np.ndarray) -> np.ndarray:
     return ((m @ G) % 2).ravel()
 
 
+# cada coluna de H e um padrao de 3 bits distinto e nao nulo -> a sindrome,
+# lida como numero de 0 a 7, aponta direto para a posicao a corrigir. Tabela
+# fixa de 8 entradas (-1 = sindrome 0, sem erro) monta essa busca uma vez so.
+_PESOS_SINDROME = np.array([4, 2, 1])
+_COLUNA_POR_SINDROME = np.full(8, -1, dtype=int)
+for _i in range(7):
+    _COLUNA_POR_SINDROME[H[:, _i] @ _PESOS_SINDROME] = _i
+
+
 def hamming74_decode(received: np.ndarray) -> np.ndarray:
-    """Decodifica blocos de 7 bits corrigindo até 1 erro por bloco (síndrome)."""
+    """Decodifica blocos de 7 bits corrigindo até 1 erro por bloco (síndrome).
+
+    Vetorizado: a sindrome de cada bloco vira um indice em 0..7 que consulta
+    `_COLUNA_POR_SINDROME` em vez de percorrer os blocos em um laco Python.
+    """
     r = np.asarray(received).astype(int).reshape(-1, 7).copy()
     syndromes = (r @ H.T) % 2  # (n_blocos, 3)
-    cols = H.T  # (7, 3): coluna i de H
-    for k, s in enumerate(syndromes):
-        if s.any():
-            match = np.where((cols == s).all(axis=1))[0]
-            if match.size:
-                r[k, match[0]] ^= 1
+    indices = syndromes @ _PESOS_SINDROME  # (n_blocos,), cada um em 0..7
+    colunas = _COLUNA_POR_SINDROME[indices]  # -1 onde a sindrome e 0
+    linhas = np.nonzero(colunas >= 0)[0]
+    r[linhas, colunas[linhas]] ^= 1
     return r[:, :4].ravel()
