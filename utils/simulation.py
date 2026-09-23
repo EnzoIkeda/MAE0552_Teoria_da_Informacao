@@ -52,10 +52,15 @@ def bsc(bits, p, generator=None):
     """Canal binario simetrico: inverte cada bit de forma independente com prob. p.
 
     `bits` e um array de 0/1 de qualquer formato; o retorno tem o mesmo formato.
+    Preserva o dtype inteiro de entrada (ex.: `uint8`) em vez de forcar sempre
+    o inteiro padrao de 8 bytes -- importa para mensagens longas, onde cada
+    byte a menos por bit economiza memoria proporcionalmente.
     """
-    bits = np.asarray(bits).astype(int)
+    bits = np.asarray(bits)
+    if not np.issubdtype(bits.dtype, np.integer):
+        bits = bits.astype(np.uint8)
     g = generator if generator is not None else np.random.default_rng()
-    flips = (g.random(bits.shape) < p).astype(int)
+    flips = (g.random(bits.shape) < p).astype(bits.dtype)
     return np.bitwise_xor(bits, flips)
 
 
