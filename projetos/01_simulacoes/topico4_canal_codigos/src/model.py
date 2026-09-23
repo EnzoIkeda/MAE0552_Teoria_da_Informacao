@@ -12,18 +12,35 @@ from __future__ import annotations
 
 import numpy as np
 
+
+def _como_inteiro(bits: np.ndarray) -> np.ndarray:
+    """`asarray` que preserva um dtype inteiro ja existente (ex.: uint8).
+
+    So cai para `uint8` quando a entrada nao e inteira (lista de bool, por
+    exemplo). Evita promover mensagens longas para o inteiro de 8 bytes
+    padrao do numpy quando o chamador ja passou algo mais compacto.
+    """
+    bits = np.asarray(bits)
+    if not np.issubdtype(bits.dtype, np.integer):
+        bits = bits.astype(np.uint8)
+    return bits
+
+
 # ---------------------------------------------------------------- repetição ---
 
 
 def repetition_encode(bits: np.ndarray, n_rep: int) -> np.ndarray:
     """Cada bit vira `n_rep` cópias (use `n_rep` ímpar para não ter empate)."""
-    return np.repeat(np.asarray(bits).astype(int), n_rep)
+    return np.repeat(_como_inteiro(bits), n_rep)
 
 
 def repetition_decode(received: np.ndarray, n_rep: int) -> np.ndarray:
     """Voto de maioria em blocos de `n_rep` bits."""
-    blocks = np.asarray(received).astype(int).reshape(-1, n_rep)
-    return (blocks.sum(axis=1) > n_rep / 2).astype(int)
+    blocks = _como_inteiro(received).reshape(-1, n_rep)
+    # soma em int64 mesmo com blocks em uint8: n_rep cabe sem estourar e evita
+    # que o acumulador da soma sature em blocos muito longos.
+    maioria = blocks.sum(axis=1, dtype=np.int64) > n_rep / 2
+    return maioria.astype(np.uint8)
 
 
 # ------------------------------------------------------------- Hamming(7,4) ---
@@ -35,7 +52,7 @@ G = np.array(
         [0, 0, 1, 0, 0, 1, 1],
         [0, 0, 0, 1, 1, 1, 1],
     ],
-    dtype=int,
+    dtype=np.uint8,
 )
 
 H = np.array(
@@ -44,13 +61,13 @@ H = np.array(
         [1, 0, 1, 1, 0, 1, 0],
         [0, 1, 1, 1, 0, 0, 1],
     ],
-    dtype=int,
+    dtype=np.uint8,
 )
 
 
 def hamming74_encode(bits: np.ndarray) -> np.ndarray:
     """Codifica múltiplos de 4 bits; retorna blocos de 7 bits concatenados."""
-    m = np.asarray(bits).astype(int).reshape(-1, 4)
+    m = _como_inteiro(bits).reshape(-1, 4)
     return ((m @ G) % 2).ravel()
 
 
@@ -69,7 +86,7 @@ def hamming74_decode(received: np.ndarray) -> np.ndarray:
     Vetorizado: a sindrome de cada bloco vira um indice em 0..7 que consulta
     `_COLUNA_POR_SINDROME` em vez de percorrer os blocos em um laco Python.
     """
-    r = np.asarray(received).astype(int).reshape(-1, 7).copy()
+    r = _como_inteiro(received).reshape(-1, 7).copy()
     syndromes = (r @ H.T) % 2  # (n_blocos, 3)
     indices = syndromes @ _PESOS_SINDROME  # (n_blocos,), cada um em 0..7
     colunas = _COLUNA_POR_SINDROME[indices]  # -1 onde a sindrome e 0
