@@ -11,6 +11,8 @@ para o Passo 11 saem de `utils.info_theory` / da média empírica dos incremento
 
 from __future__ import annotations
 
+import heapq
+
 import numpy as np
 
 
@@ -41,3 +43,38 @@ def log_growth_increments(outcomes: np.ndarray, b: np.ndarray, odds: np.ndarray)
     x = np.asarray(outcomes).astype(int)
     with np.errstate(divide="ignore"):
         return np.log2(b[x] * odds[x])  # -inf se b_x = 0 e o resultado x sai
+
+
+def theoretical_growth_rate(b: np.ndarray, p: np.ndarray, odds: np.ndarray) -> float:
+    """W(b, p) = sum_i p_i log2(b_i o_i); -inf se b_i = 0 em resultado com p_i > 0."""
+    b = np.asarray(b, dtype=float)
+    p = np.asarray(p, dtype=float)
+    odds = np.asarray(odds, dtype=float)
+    with np.errstate(divide="ignore"):
+        termos = np.where(p > 0, p * np.log2(b * odds), 0.0)
+    return float(termos.sum())
+
+
+def huffman_lengths(p: np.ndarray) -> np.ndarray:
+    """Comprimentos das palavras de um codigo de Huffman binario para a pmf `p`.
+
+    Funde repetidamente os dois nos menos provaveis; cada simbolo ganha um bit
+    a cada fusao de que participa. Serve para conferir H(p) <= L < H(p) + 1 sem
+    recorrer a uma biblioteca de codificacao.
+    """
+    p = np.asarray(p, dtype=float)
+    comprimentos = np.zeros(p.size, dtype=int)
+    if p.size == 1:
+        comprimentos[0] = 1
+        return comprimentos
+    heap = [(float(pi), i, [i]) for i, pi in enumerate(p)]
+    heapq.heapify(heap)
+    proximo_id = p.size
+    while len(heap) > 1:
+        pa, _, simbolos_a = heapq.heappop(heap)
+        pb, _, simbolos_b = heapq.heappop(heap)
+        for s in simbolos_a + simbolos_b:
+            comprimentos[s] += 1
+        heapq.heappush(heap, (pa + pb, proximo_id, simbolos_a + simbolos_b))
+        proximo_id += 1
+    return comprimentos
