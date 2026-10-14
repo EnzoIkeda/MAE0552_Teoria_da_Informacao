@@ -66,7 +66,7 @@ Um ponto importante para interpretar os resultados: definindo *c \= 1 / Σ(1/o�
 
 # **3\. Metodologia**
 
-A simulação foi implementada em Python (NumPy, pandas e Matplotlib). Seguindo a orientação do roteiro, entropia, divergência KL e informação mútua foram programadas manualmente a partir das definições (equações 1 a 3), sem recorrer a funções prontas de bibliotecas. As principais escolhas de projeto foram:
+A simulação foi implementada em Python (NumPy, pandas e Matplotlib) no notebook `topico3_aep_kelly.ipynb`, com um passo do roteiro por seção. Seguindo a orientação do roteiro, entropia, divergência KL e informação mútua vêm das funções do grupo em `utils/info_theory.py`, programadas manualmente a partir das definições (equações 1 a 3), sem recorrer a funções prontas de bibliotecas. Todos os números deste relatório, inclusive os erros-padrão e o código de Huffman, são produzidos pelo notebook. As principais escolhas de projeto foram:
 
 * **Mundo simulado.** Probabilidades verdadeiras *p \= (0,5; 0,3; 0,2)* para casa, empate e visitante, e cotações *o \= (2; 3; 5\)*. A semente do gerador é fixa (42), tornando os resultados reprodutíveis.
 
@@ -150,7 +150,23 @@ A interpretação econômica é forte: uma dica que reduz a incerteza em apenas 
 
 ## **4.5 Custo de acreditar em uma distribuição errada**
 
-O apostador com crenças *q \= (0,7; 0,2; 0,1)* obteve taxa de crescimento empírica de −0,1784 bit por aposta, contra −0,0456 do apostador de Kelly. A perda empírica, *0,1328 bit* (erro-padrão de 0,0014), coincide com *D(p‖q) \= 0,1328 bit*, como prevê a equação 6\. Nota-se que o custo de uma crença errada é quase três vezes maior que a margem de 0,047 bit da casa: errar sobre o mundo é mais caro do que a taxa que o mercado cobra.
+O apostador com crenças *q \= (0,7; 0,2; 0,1)* obteve taxa de crescimento empírica de −0,1784 bit por aposta, contra −0,0457 do apostador de Kelly nas mesmas temporadas. Como na Seção 4.4, a comparação é pareada: por rodada, a diferença entre os dois é *log₂(pₓ/qₓ)*, e a cotação sai da conta. A perda empírica, *0,1327 bit* (erro-padrão de 0,0014), fica a 0,04 erro-padrão de *D(p‖q) \= 0,1328 bit*, como prevê a equação 6\. Nota-se que o custo de uma crença errada é quase três vezes maior que a margem de 0,047 bit da casa: errar sobre o mundo é mais caro do que a taxa que o mercado cobra.
+
+## **4.6 Cotações uniformes: crescimento positivo e a fórmula W\* \= log₂ m − H(p)**
+
+Como a margem da casa torna *W\** negativo, o cenário principal não mostra crescimento exponencial nem ganhos extraordinários. Para ilustrar o caso particular do enunciado, as mesmas 1.000 temporadas foram reapostadas contra uma casa ingênua que paga *oᵢ \= 3* para todos os resultados, ignorando que eles não são igualmente prováveis. Nenhum sorteio novo foi feito: muda apenas o quanto cada resultado paga.
+
+Tabela 4 – Mesmas temporadas, com cotações uniformes oᵢ \= 3 (200 rodadas, 1.000 temporadas).
+
+| Estratégia | W teórico | Taxa média (bits/aposta) | Temporadas com log₂ S \> 20 | Patrimônio mediano |
+| :---- | :---: | :---: | :---: | :---: |
+| Tudo no favorito | −∞ | −∞ | 0,0% | 0 |
+| Uniforme | 0,0000 | 0,0000 | 0,0% | 1 |
+| Kelly | 0,0995 | 0,0997 | 51,2% | ≈ 1,2·10⁶ |
+
+Fonte: elaboração própria.
+
+Com cotações uniformes, a taxa ótima se reduz a *W\* \= log₂ m − H(p) \= 1,5850 − 1,4855 \= 0,0995 bit por aposta*, e a simulação de Kelly (0,0997) reproduz esse valor. A estratégia uniforme fica exatamente parada, porque *bᵢoᵢ \= 1* em todos os resultados, e a "tudo no favorito" continua arruinada. A leitura é a do enunciado: o ganho do apostador bem informado é exatamente o quanto a entropia da distribuição real fica abaixo do máximo *log₂ m*, então quanto mais previsível o resultado, mais há a extrair de uma casa que não percebe o padrão. Em metade das temporadas o patrimônio de Kelly passa de *2²⁰ ≈ 10⁶* vezes o inicial, o ganho extraordinário que o cenário com margem não tinha como mostrar.
 
 # **5\. Discussão**
 
@@ -160,11 +176,11 @@ O apostador com crenças *q \= (0,7; 0,2; 0,1)* obteve taxa de crescimento empí
 
 **Informação é crescimento.** A igualdade *ΔW \= I(X;Y)* dá à informação mútua uma leitura operacional: bits de informação sobre o resultado convertem-se, um a um, em bits de taxa de dobra. Do mesmo modo, *D(p‖q)* é o preço, também em bits por rodada, de se operar com o modelo errado.
 
-**Limitações e possíveis extensões.** (i) As cotações escolhidas contêm margem de 3,3%, de modo que *W\** é negativo e todas as curvas decaem; para ilustrar o crescimento exponencial positivo da estratégia de Kelly sem depender da dica, seria interessante repetir o experimento com cotações justas (*oᵢ \= 1/pᵢ*, *W\* \= 0*) ou favoráveis ao apostador. (ii) Com um ativo sem risco (opção de não apostar), a decisão ótima nesse mundo seria abster-se, alternativa que o modelo original não contempla. (iii) O apostador conhece *p* exatamente; na prática *p* seria estimado, e o erro de estimação gera justamente o tipo de perda medido por *D(p‖q)*. (iv) Assumiram-se rodadas i.i.d., ausência de custos de transação e frações de aposta arbitrariamente divisíveis. (v) O experimento de compressão foi tratado analiticamente (entropia e código de Huffman); não houve implementação de um codificador.
+**Limitações e possíveis extensões.** (i) As cotações principais contêm margem de 3,3%, de modo que *W\** é negativo e todas as curvas decaem; o crescimento exponencial positivo de Kelly sem depender da dica aparece apenas no cenário de cotações uniformes da Seção 4.6. (ii) Com um ativo sem risco (opção de não apostar), a decisão ótima nesse mundo seria abster-se, alternativa que o modelo original não contempla. (iii) O apostador conhece *p* exatamente; na prática *p* seria estimado, e o erro de estimação gera justamente o tipo de perda medido por *D(p‖q)*. (iv) Assumiram-se rodadas i.i.d., ausência de custos de transação e frações de aposta arbitrariamente divisíveis. (v) O experimento de compressão foi tratado analiticamente (entropia e comprimentos do código de Huffman, calculados no notebook); nenhuma sequência foi de fato codificada.
 
 # **6\. Conclusão**
 
-A simulação reproduziu, com boa precisão, todas as previsões teóricas do tópico: a taxa de crescimento empírica coincidiu com *W(b,p)* para as três estratégias, o desvio-padrão decaiu como *σ/√n*, o ganho da informação lateral igualou *I(X;Y)* (0,3855 contra 0,3835 bit) e a perda por crenças erradas igualou *D(p‖q)* (0,1328 bit). Do ponto de vista estatístico, o tópico ilustra como a Lei dos Grandes Números e o Teorema Central do Limite, aplicados a variáveis logarítmicas, fornecem o limite fundamental de compressão e o critério ótimo de alocação de capital, e como a entropia, a divergência KL e a informação mútua têm interpretações diretas em bits por observação.
+A simulação reproduziu, com boa precisão, todas as previsões teóricas do tópico: a taxa de crescimento empírica coincidiu com *W(b,p)* para as três estratégias, o desvio-padrão decaiu como *σ/√n*, o ganho da informação lateral igualou *I(X;Y)* (0,3855 contra 0,3835 bit) e a perda por crenças erradas igualou *D(p‖q)* (0,1327 contra 0,1328 bit). Com cotações uniformes, a taxa de Kelly reproduziu *W\* \= log₂ m − H(p)* (0,0997 contra 0,0995 bit). Do ponto de vista estatístico, o tópico ilustra como a Lei dos Grandes Números e o Teorema Central do Limite, aplicados a variáveis logarítmicas, fornecem o limite fundamental de compressão e o critério ótimo de alocação de capital, e como a entropia, a divergência KL e a informação mútua têm interpretações diretas em bits por observação.
 
 # **Referências**
 
