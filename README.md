@@ -146,6 +146,11 @@ topicoN_xxx/
 └── relatorio.md           # relatório curto pedido no enunciado
 ```
 
+`topico4_canal_codigos/` tem também `entrada/sample.jpg`: imagem de teste
+usada no Passo 3 (binarizada e transmitida pelo canal), versionada (ao
+contrário de `dados/`/`figuras/`) para que o notebook rode igual em qualquer
+checkout, inclusive no CI.
+
 ## Início dos notebooks
 
 Todo notebook fica em `projetos/<proposta>/<topico>/` e começa com **uma célula
