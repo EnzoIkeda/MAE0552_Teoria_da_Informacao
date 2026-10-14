@@ -76,7 +76,10 @@ ajuste de rating| < 40 e exclusão de partidas por correspondência.
   do repositório [EnzoIkeda/Metis](https://github.com/EnzoIkeda/Metis). Os
   parâmetros das cartas vêm de `balance_data_1.0.json` (versão 1.0, SHA-256
   `ef2c6b4e2b9e57f65b13ae247b3cd4759d7cc2795a963b0a40595608aaa3d3b4`). As
-  partidas não estão publicadas, mas podem ser reproduzidas com a semente
+  partidas, junto com esse arquivo, estão na release
+  [dados-metis-v1.0](https://github.com/EnzoIkeda/MAE0552_Teoria_da_Informacao/releases/tag/dados-metis-v1.0)
+  deste repositório (`metis_dados_v1.0.tar.xz`, a extrair em
+  `projetos/02_projeto_final/dados/`) e podem ser reproduzidas com a semente
   20261005.
 - **Lichess.** Lichess Open Database, partidas ranqueadas de janeiro de 2014,
   arquivo `lichess_db_standard_rated_2014-01.pgn.zst`, disponível em
