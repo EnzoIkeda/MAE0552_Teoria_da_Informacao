@@ -70,6 +70,24 @@ adaptamos ao Métis.
 Filtros do Lichess: resultado válido, ao menos 4 lances, |diferença de
 ajuste de rating| < 40 e exclusão de partidas por correspondência.
 
+### Fontes dos dados
+
+- **Métis.** Partidas geradas pelo simulador do jogo, `Tools/Metis.Simulator`
+  do repositório [EnzoIkeda/Metis](https://github.com/EnzoIkeda/Metis). Os
+  parâmetros das cartas vêm de `balance_data_1.0.json` (versão 1.0, SHA-256
+  `ef2c6b4e2b9e57f65b13ae247b3cd4759d7cc2795a963b0a40595608aaa3d3b4`). As
+  partidas não estão publicadas, mas podem ser reproduzidas com a semente
+  20261005.
+- **Lichess.** Lichess Open Database, partidas ranqueadas de janeiro de 2014,
+  arquivo `lichess_db_standard_rated_2014-01.pgn.zst`, disponível em
+  <https://database.lichess.org/>. Domínio público (CC0).
+- **UCI Heart Disease.** JANOSI, A.; STEINBRUNN, W.; PFISTERER, M.; DETRANO,
+  R. *Heart Disease* [dataset]. UCI Machine Learning Repository, 1989.
+  DOI: [10.24432/C52P4X](https://doi.org/10.24432/C52P4X). Arquivo obtido
+  em <https://archive.ics.uci.edu/dataset/45/heart+disease>. Usamos
+  `processed.cleveland.data` e os custos dos exames em `costs/`. Licença
+  CC BY 4.0.
+
 Os dados brutos ficam fora do Git; versionamos apenas os scripts e as
 tabelas derivadas.
 
