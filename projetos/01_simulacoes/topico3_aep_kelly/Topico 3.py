@@ -140,6 +140,23 @@ summary_df = pd.DataFrame(summary_rows)
 print("\nPasso 6 - comparacao entre estrategias:")
 print(summary_df.to_string(index=False))
 
+# Figura 1: evolucao do log2(patrimonio) ao longo da temporada, mediana e
+# faixa entre os percentis 10 e 90 das temporadas simuladas. A estrategia
+# "tudo no favorito" fica de fora porque vai a -inf na primeira derrota.
+rodadas = np.arange(1, n_rounds + 1)
+fig, ax = plt.subplots(figsize=(8, 4.5))
+for name in ["uniforme", "kelly"]:
+    p10, p50, p90 = np.percentile(log_wealth_by_strategy[name], [10, 50, 90], axis=0)
+    ax.plot(rodadas, p50, label=f"{name} (mediana)")
+    ax.fill_between(rodadas, p10, p90, alpha=0.25, label=f"{name} (P10 a P90)")
+ax.axhline(0, color="gray", linewidth=0.8)
+ax.set_xlabel("rodada")
+ax.set_ylabel("log2(patrimonio)")
+ax.set_title("Figura 1 - evolucao do log2 do patrimonio")
+ax.legend()
+plt.tight_layout()
+plt.show()
+
 
 # ---------------------------------------------------------------------
 # Passo 7: comparar com o valor teorico W(b, p)
@@ -162,11 +179,26 @@ for name, strat_fn in strategies.items():
 b_kelly = strategy_kelly(p_true, odds)
 W_star = theoretical_growth_rate(b_kelly, p_true, odds)
 
+# desvio-padrao por rodada de log2(b(X) o(X)) sob p; pelo TCL, o desvio de
+# (1/n) log2(patrimonio) deve ser sigma / sqrt(n)
+ganho_kelly = np.log2(b_kelly * odds)
+sigma_kelly = np.sqrt(np.sum(p_true * (ganho_kelly - W_star) ** 2))
+
+aep_rows = []
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 for ax, n in zip(axes, [10, 100, 1000], strict=True):
     om = simulate_seasons(p_true, n, n_seasons, rng)
     lw = log_wealth_trajectory(om, b_kelly, odds)
     growth = lw[:, -1] / n
+    aep_rows.append(
+        {
+            "n": n,
+            "media": growth.mean(),
+            "desvio_empirico": growth.std(),
+            "sigma/sqrt(n) teorico": sigma_kelly / np.sqrt(n),
+            "frac em W* +- 0.02": np.mean(np.abs(growth - W_star) <= 0.02),
+        }
+    )
     ax.hist(growth, bins=40, density=True)
     ax.axvline(W_star, color="red", linestyle="--", label="W* teorico")
     ax.set_title(f"n = {n}")
@@ -175,6 +207,10 @@ for ax, n in zip(axes, [10, 100, 1000], strict=True):
 plt.tight_layout()
 plt.show()
 print("\nPasso 8 - histograma AEP exibido na tela")
+
+aep_df = pd.DataFrame(aep_rows)
+print(f"\nTabela 3 - concentracao de Kelly em torno de W* = {W_star:.4f}:")
+print(aep_df.to_string(index=False, float_format=lambda x: f"{x:.4f}"))
 
 
 # ---------------------------------------------------------------------

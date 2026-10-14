@@ -128,8 +128,8 @@ Tabela 3 – Concentração da taxa de crescimento de Kelly em torno de W\* \= �
 
 | n (rodadas) | Média de (1/n) log₂ S | Desvio-padrão empírico | σ/√n teórico | % das temporadas em W\* ± 0,02 |
 | :---- | :---: | :---: | :---: | :---: |
-| 10 | −0,0456 | 0,0214 | 0,0220 | 70,4% |
-| 100 | −0,0453 | 0,0070 | 0,0070 | 99,5% |
+| 10 | −0,0459 | 0,0218 | 0,0220 | 70,8% |
+| 100 | −0,0456 | 0,0072 | 0,0070 | 99,7% |
 | 1000 | −0,0455 | 0,0022 | 0,0022 | 100,0% |
 
 Fonte: elaboração própria.
