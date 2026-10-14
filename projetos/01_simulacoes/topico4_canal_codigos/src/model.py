@@ -12,6 +12,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from utils.info_theory import binary_entropy
+
 
 def _como_inteiro(bits: np.ndarray) -> np.ndarray:
     """`asarray` que preserva um dtype inteiro ja existente (ex.: uint8).
@@ -93,3 +95,57 @@ def hamming74_decode(received: np.ndarray) -> np.ndarray:
     linhas = np.nonzero(colunas >= 0)[0]
     r[linhas, colunas[linhas]] ^= 1
     return r[:, :4].ravel()
+
+
+# ------------------------------------------------------- valores teoricos ---
+
+
+def bissecao(f, a: float, b: float, tol: float = 1e-10) -> float:
+    """Raiz de `f` em [a, b] por bissecao (f(a) e f(b) com sinais opostos)."""
+    fa = f(a)
+    if fa * f(b) > 0:
+        raise ValueError("f(a) e f(b) precisam ter sinais opostos")
+    while b - a > tol:
+        m = 0.5 * (a + b)
+        fm = f(m)
+        if fa * fm <= 0:
+            b = m
+        else:
+            a, fa = m, fm
+    return 0.5 * (a + b)
+
+
+def binary_entropy_inverse(h: float) -> float:
+    """p em [0, 1/2] tal que H_b(p) = h (o ramo de baixo da entropia binaria)."""
+    if h <= 0.0:
+        return 0.0
+    if h >= 1.0:
+        return 0.5
+    return bissecao(lambda x: binary_entropy(x) - h, 1e-15, 0.5)
+
+
+def ber_floor_above_capacity(rate: float, capacity: float) -> float:
+    """Menor BER possivel para QUALQUER codigo de taxa `rate` num canal de capacidade `capacity`.
+
+    Parte inversa do teorema de Shannon combinada com taxa-distorcao: com uma BER
+    p_b tolerada, a taxa maxima alcancavel e C / (1 - H_b(p_b)) (MacKay, 2003,
+    cap. 10). Para R > C isso da p_b >= H_b^-1(1 - C/R), um piso que nenhum
+    comprimento de bloco remove. Para R <= C o piso e 0: a BER pode ir a zero.
+    """
+    if rate <= capacity:
+        return 0.0
+    return binary_entropy_inverse(1.0 - capacity / rate)
+
+
+def hamming74_ber_exata(p: float) -> float:
+    """BER exata dos 4 bits de informacao do Hamming(7,4) num BSC(p).
+
+    O codigo e linear, entao o erro apos decodificar depende so do padrao de erro
+    do canal, nao da mensagem: basta decodificar cada um dos 128 padroes como se
+    a palavra enviada fosse a nula e ponderar pela probabilidade do padrao.
+    """
+    padroes = ((np.arange(128)[:, None] >> np.arange(6, -1, -1)) & 1).astype(np.uint8)
+    erros_info = hamming74_decode(padroes.ravel()).reshape(128, 4).sum(axis=1)
+    pesos = padroes.sum(axis=1)
+    prob = p**pesos * (1.0 - p) ** (7 - pesos)
+    return float((prob * erros_info).sum() / 4.0)
