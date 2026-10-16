@@ -4,6 +4,14 @@
 Universidade de São Paulo, Instituto de Matemática e Estatística
 São Paulo, outubro de 2026
 
+**Integrantes do grupo**
+
+- Yasmim da Silva Sobrinho
+- Iohanna Elblaus Souza
+- Lucas Kousuke Matsunaga
+- Bruno Rocha Levi
+- Enzo Takeshi Ikeda
+
 ## Introdução
 
 Este relatório reúne as quatro atividades de simulação propostas em
