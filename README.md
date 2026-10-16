@@ -2,6 +2,9 @@
 
 [![CI](https://github.com/EnzoIkeda/MAE0552_Teoria_da_Informacao/actions/workflows/ci.yml/badge.svg)](https://github.com/EnzoIkeda/MAE0552_Teoria_da_Informacao/actions/workflows/ci.yml)
 
+**Integrantes:** Yasmim da Silva Sobrinho, Iohanna Elblaus Souza, Lucas Kousuke
+Matsunaga, Bruno Rocha Levi e Enzo Takeshi Ikeda.
+
 Repositório do grupo para as atividades práticas da disciplina. Cada **proposta**
 entregue ao longo do semestre vira um subprojeto independente dentro de
 `projetos/`. As propostas não têm necessariamente a mesma finalidade; o que elas
@@ -127,6 +130,8 @@ Instalação em **Para começar a trabalhar**.
 └── projetos/
     ├── _template/             # esqueleto para começar uma proposta nova
     └── 01_simulacoes/         # propostas/1_Simulacoes.pdf (4 tópicos)
+        ├── relatorio.md       #   relatório consolidado dos 4 tópicos
+        ├── relatorio.pdf      #   versão em PDF do relatório consolidado
         ├── topico1_entropia_mi/
         ├── topico2_dpi_markov/
         ├── topico3_aep_kelly/
@@ -142,7 +147,7 @@ topicoN_xxx/
 │   ├── __init__.py
 │   └── model.py           # código específico do tópico (modelo, codec, ...)
 ├── dados/                 # amostras/resultados gerados (não versionado)
-├── figuras/               # gráficos exportados (não versionado)
+├── figuras/               # gráficos exportados (ignorado por padrão; ver abaixo)
 └── relatorio.md           # relatório curto pedido no enunciado
 ```
 
@@ -150,6 +155,12 @@ topicoN_xxx/
 usada no Passo 3 (binarizada e transmitida pelo canal), versionada (ao
 contrário de `dados/`/`figuras/`) para que o notebook rode igual em qualquer
 checkout, inclusive no CI.
+
+Em `01_simulacoes/`, as figuras citadas nos relatórios foram versionadas com
+`git add -f` (apesar da regra `**/figuras/*` do `.gitignore`), para que as
+imagens carreguem no GitHub. Se um notebook for rodado de novo e mudar uma
+dessas figuras, ela aparece como modificada e deve entrar no commit junto com o
+relatório.
 
 ## Início dos notebooks
 
@@ -247,7 +258,9 @@ git merge main                        # resolve conflitos, se houver, e commita
 ```
 
 Artefatos gerados (`dados/`, `figuras/`, `.venv/`, checkpoints) já são ignorados
-pelo `.gitignore`; não precisam entrar nos commits.
+pelo `.gitignore`; não precisam entrar nos commits. A exceção são as figuras
+citadas em relatórios, que precisam estar no repositório para aparecer no GitHub
+(ver **Estrutura**).
 
 ## Qualidade de código
 
@@ -302,9 +315,11 @@ Markdown → HTML autocontido → PDF, tudo offline:
 |---------|-----------|
 | `make relatorio` | converte todos os `projetos/**/relatorio.md` (menos o `_template`) |
 | `make relatorio ARGS="projetos/01_simulacoes/topico1_entropia_mi"` | só a pasta indicada |
-| `python scripts/relatorio_pdf.py caminho/relatorio.md -o saida.pdf` | um arquivo, saída explícita |
+| `python scripts/relatorio_pdf.py caminho/relatorio.md -o "$PWD/saida.pdf"` | um arquivo, saída explícita |
 
 - No Windows/sem `make`: `python scripts\dev.py relatorio [...]`.
+- Com `-o`, passe um caminho **absoluto**: com caminho relativo o motor Chromium
+  não consegue gravar o arquivo e o script deixa só o `.html`.
 - O PDF sai ao lado do `.md` (`relatorio.pdf`). `--keep-html` mantém o HTML
   intermediário; `--engine {auto,weasyprint,chrome,html}` força o motor.
 - **Matemática**: `$ ... $` (inline) e `$$ ... $$` (bloco) são pré-renderizados
