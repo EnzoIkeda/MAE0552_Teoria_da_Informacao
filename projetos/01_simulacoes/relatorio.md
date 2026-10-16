@@ -1,7 +1,9 @@
 # Primeiras simulações em grupo: relatório consolidado
 
 **MAE0552 Teoria da Informação**
+
 Universidade de São Paulo, Instituto de Matemática e Estatística
+
 São Paulo, outubro de 2026
 
 **Integrantes do grupo**
