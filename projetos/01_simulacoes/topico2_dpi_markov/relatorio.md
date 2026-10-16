@@ -65,12 +65,12 @@ representação comprimida é de apenas 0,021 bit. Com N = 2000 rótulos, o desv
 padrão dessa queda entre réplicas é da ordem de 0,009 bit, isto é, metade do
 efeito: a desigualdade não ficaria resolvida pelos dados, e uma realização
 qualquer poderia sair com o sinal invertido. Com N = 20000 o IC da queda é
-[0,0158, 0,0261], inteiramente positivo. Vale notar que a projeção na direção
-da diferença das médias não é uma perda arbitrária de informação: sob
-covariância isotrópica ela é estatística suficiente para o rótulo, então
-I(rótulo; projeção) = I(rótulo; vetor completo). O que de fato descarta
-informação nessa estimativa é a discretização em 10 bins, e ela é aplicada da
-mesma forma nos dois estágios comparados.
+[0,0158, 0,0261], inteiramente positivo. A perda vem da compressão, e não da discretização: a
+projeção da imagem na direção da diferença das médias é estatística suficiente
+para o rótulo (covariância isotrópica), mas a média por blocos não é, porque o
+sinal varia dentro de cada bloco. Com a mesma discretização em 10 bins nos dois
+estágios, a conta exata dá 0,8890 bit para a imagem e 0,8672 bit para a
+representação, uma queda de 0,0218 bit compatível com a estimada.
 
 **Efeito do tamanho de amostra por geração.** É aqui que está o resultado mais
 forte do Passo 8, e ele tem uma armadilha numérica. Uma categoria que zera numa
