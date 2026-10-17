@@ -8,11 +8,11 @@ São Paulo, outubro de 2026
 
 **Integrantes do grupo**
 
-- Yasmim da Silva Sobrinho
-- Iohanna Elblaus Souza
-- Lucas Kousuke Matsunaga
-- Bruno Rocha Levi
-- Enzo Takeshi Ikeda
+- Yasmim da Silva Sobrinho, 13687630
+- Iohanna Elblaus Souza, 13749570
+- Lucas Kousuke Matsunaga, 14591177
+- Bruno Rocha Levi, 11795547
+- Enzo Takeshi Ikeda, 9784377
 
 ## Introdução
 
@@ -22,12 +22,12 @@ um modelo probabilístico, gera dados segundo esse modelo, estima quantidades de
 teoria da informação "na mão" a partir dos dados e compara as estimativas com os
 valores teóricos.
 
-| Tópico | Problema | Resultado teórico testado |
-| --- | --- | --- |
-| 1 | Teste rápido de dengue ao longo de vários dias | Entropia, informação mútua, regra da cadeia, teste G |
-| 2 | Telefone sem fio, classificador e colapso de modelo | Desigualdade de processamento de dados |
-| 3 | Apostas em um campeonato de futebol | AEP, compressão e critério de Kelly |
-| 4 | Link de rádio Terra-Marte transmitindo uma imagem | Capacidade do canal e teorema de Shannon |
+| Tópico | Problema                                            | Resultado teórico testado                            |
+| ------ | --------------------------------------------------- | ---------------------------------------------------- |
+| 1      | Teste rápido de dengue ao longo de vários dias      | Entropia, informação mútua, regra da cadeia, teste G |
+| 2      | Telefone sem fio, classificador e colapso de modelo | Desigualdade de processamento de dados               |
+| 3      | Apostas em um campeonato de futebol                 | AEP, compressão e critério de Kelly                  |
+| 4      | Link de rádio Terra-Marte transmitindo uma imagem   | Capacidade do canal e teorema de Shannon             |
 
 Todos os tópicos usam as mesmas funções de entropia, entropia conjunta e
 condicional, informação mútua e divergência de Kullback-Leibler, escritas a
@@ -59,10 +59,10 @@ conjunta da Tabela 1.1.
 
 **Tabela 1.1.** Distribuição conjunta p(d, t).
 
-| | T=0 | T=1 | total |
-| --- | --- | --- | --- |
-| **D=0** | 0,8924 | 0,0276 | 0,9200 |
-| **D=1** | 0,0096 | 0,0704 | 0,0800 |
+|           | T=0    | T=1    | total  |
+| --------- | ------ | ------ | ------ |
+| **D=0**   | 0,8924 | 0,0276 | 0,9200 |
+| **D=1**   | 0,0096 | 0,0704 | 0,0800 |
 | **total** | 0,9020 | 0,0980 | 1,0000 |
 
 Os valores teóricos são H(D) = 0,4022, H(T) = 0,4626, H(D,T) = 0,6234,
@@ -99,12 +99,12 @@ contra 0,0980), e as estimativas por contagem ficam próximas da teoria
 **Tabela 1.2.** Estimativas por contagem com N = 2000.
 
 | quantidade | estimado | teórico | erro relativo (%) |
-| --- | --- | --- | --- |
-| H(D) | 0,4144 | 0,4022 | 3,04 |
-| H(T) | 0,4480 | 0,4626 | 3,15 |
-| H(D,T) | 0,6215 | 0,6234 | 0,30 |
-| H(D\|T) | 0,1735 | 0,1607 | 7,92 |
-| I(D;T) | 0,2409 | 0,2414 | 0,22 |
+| ---------- | -------- | ------- | ----------------- |
+| H(D)       | 0,4144   | 0,4022  | 3,04              |
+| H(T)       | 0,4480   | 0,4626  | 3,15              |
+| H(D,T)     | 0,6215   | 0,6234  | 0,30              |
+| H(D\|T)    | 0,1735   | 0,1607  | 7,92              |
+| I(D;T)     | 0,2409   | 0,2414  | 0,22              |
 
 O IC bootstrap de 95% para I(D;T) é [0,2004, 0,2820] e cobre o valor teórico.
 A concordância em I(D;T) é melhor que nas entropias que a compõem porque os
@@ -117,14 +117,14 @@ abaixo de 1%.
 
 **Tabela 1.3.** Î(D;T) médio em 400 amostras por N.
 
-| N | Î médio | erro relativo (%) | faixa 10% a 90% |
-| --- | --- | --- | --- |
-| 20 | 0,2639 | 9,3 | [0,0000, 0,6098] |
-| 50 | 0,2700 | 11,8 | [0,1084, 0,4465] |
-| 100 | 0,2467 | 2,2 | [0,1266, 0,3725] |
-| 500 | 0,2401 | 0,6 | [0,1927, 0,2878] |
-| 2000 | 0,2412 | 0,1 | [0,2154, 0,2670] |
-| 10000 | 0,2418 | 0,1 | [0,2305, 0,2532] |
+| N     | Î médio | erro relativo (%) | faixa 10% a 90%  |
+| ----- | ------- | ----------------- | ---------------- |
+| 20    | 0,2639  | 9,3               | [0,0000, 0,6098] |
+| 50    | 0,2700  | 11,8              | [0,1084, 0,4465] |
+| 100   | 0,2467  | 2,2               | [0,1266, 0,3725] |
+| 500   | 0,2401  | 0,6               | [0,1927, 0,2878] |
+| 2000  | 0,2412  | 0,1               | [0,2154, 0,2670] |
+| 10000 | 0,2418  | 0,1               | [0,2305, 0,2532] |
 
 ![Figura 1.1. Erro de I(D;T) em função de N.](topico1_entropia_mi/figuras/t1_passo4_erro_i_vs_n.png)
 
@@ -149,11 +149,11 @@ por contagem ficam a menos de 1,3% dos valores exatos (Tabela 1.4).
 
 **Tabela 1.4.** Entropia da sequência de testes, n = 8.
 
-| quantidade | estimado | exato | erro relativo (%) |
-| --- | --- | --- | --- |
-| H(T₁…T₈) | 2,9391 | 2,9773 | 1,28 |
-| soma H(Tᵢ\|Tᵢ₋₁) | 3,0290 | 3,0571 | 0,92 |
-| 8·H(T₁) | 3,6843 | 3,7010 | 0,45 |
+| quantidade       | estimado | exato  | erro relativo (%) |
+| ---------------- | -------- | ------ | ----------------- |
+| H(T₁…T₈)         | 2,9391   | 2,9773 | 1,28              |
+| soma H(Tᵢ\|Tᵢ₋₁) | 3,0290   | 3,0571 | 0,92              |
+| 8·H(T₁)          | 3,6843   | 3,7010 | 0,45              |
 
 O ponto conceitual está na relação entre as duas primeiras linhas. T sozinho
 não é uma cadeia de Markov: quem é Markov é D, e T é a observação ruidosa dele.
@@ -185,10 +185,10 @@ independentes entre si.
 
 **Tabela 1.5.** Teste G de independência.
 
-| teste | N | Î (bits) | G | g.l. | p-valor |
-| --- | --- | --- | --- | --- | --- |
-| D × T | 2000 | 0,2409 | 667,95 | 1 | 2,8×10⁻¹⁴⁷ |
-| T₂ × T₁ | 20000 | 0,0919 | 2547,46 | 1 | < 10⁻³⁰⁰ |
+| teste   | N     | Î (bits) | G       | g.l. | p-valor    |
+| ------- | ----- | -------- | ------- | ---- | ---------- |
+| D × T   | 2000  | 0,2409   | 667,95  | 1    | 2,8×10⁻¹⁴⁷ |
+| T₂ × T₁ | 20000 | 0,0919   | 2547,46 | 1    | < 10⁻³⁰⁰   |
 
 **Passo 10: poder e nível do teste.** Com N = 300 e R = 1000 repetições por
 cenário, a taxa de rejeição acompanha a força da dependência e, sob
@@ -200,11 +200,11 @@ limitado, mas a decisão está correta na maioria delas.
 
 **Tabela 1.6.** Taxa de rejeição a α = 0,05.
 
-| cenário | I(D;T) teórico | taxa de rejeição |
-| --- | --- | --- |
-| dependência forte | 0,2414 | 1,000 |
-| dependência fraca | 0,0137 | 0,654 |
-| independência real | 0,0000 | 0,049 |
+| cenário            | I(D;T) teórico | taxa de rejeição |
+| ------------------ | -------------- | ---------------- |
+| dependência forte  | 0,2414         | 1,000            |
+| dependência fraca  | 0,0137         | 0,654            |
+| independência real | 0,0000         | 0,049            |
 
 ![Figura 1.5. Taxa de rejeição por cenário.](topico1_entropia_mi/figuras/t1_passo10_taxa_rejeicao.png)
 
@@ -320,13 +320,13 @@ Figura 2.1).
 
 **Tabela 2.1.** Informação mútua ao longo da cadeia (p = 0,10 por elo).
 
-| elo | estimado (bits) | IC 95% | teórico |
-| --- | --- | --- | --- |
-| I(X;Y₁) | 0,5255 | [0,5126, 0,5387] | 0,5310 |
-| I(X;Y₂) | 0,3071 | [0,2960, 0,3198] | 0,3199 |
-| I(X;Y₃) | 0,1923 | [0,1828, 0,2020] | 0,1984 |
-| I(X;Y₄) | 0,1248 | [0,1169, 0,1327] | 0,1247 |
-| I(X;Y₅) | 0,0784 | [0,0719, 0,0851] | 0,0789 |
+| elo     | estimado (bits) | IC 95%           | teórico |
+| ------- | --------------- | ---------------- | ------- |
+| I(X;Y₁) | 0,5255          | [0,5126, 0,5387] | 0,5310  |
+| I(X;Y₂) | 0,3071          | [0,2960, 0,3198] | 0,3199  |
+| I(X;Y₃) | 0,1923          | [0,1828, 0,2020] | 0,1984  |
+| I(X;Y₄) | 0,1248          | [0,1169, 0,1327] | 0,1247  |
+| I(X;Y₅) | 0,0784          | [0,0719, 0,0851] | 0,0789  |
 
 As diferenças sucessivas são −0,2184, −0,1148, −0,0675 e −0,0464 bit, todas
 negativas, e nenhum elo apresenta aumento significativo pelo critério dos ICs
@@ -347,12 +347,12 @@ menos de 0,02 bit dos valores teóricos 1 − H_b(pₖ) em todas as células.
 
 **Tabela 2.2.** I(X;Yⱼ) em bits para diferentes intensidades de ruído.
 
-| p por elo | Y₁ | Y₂ | Y₃ | Y₄ | Y₅ |
-| --- | --- | --- | --- | --- | --- |
-| 0,02 | 0,8447 | 0,7486 | 0,6721 | 0,5971 | 0,5456 |
-| 0,05 | 0,7121 | 0,5395 | 0,4239 | 0,3350 | 0,2614 |
-| 0,10 | 0,5377 | 0,3260 | 0,1985 | 0,1228 | 0,0787 |
-| 0,20 | 0,2765 | 0,0982 | 0,0376 | 0,0135 | 0,0055 |
+| p por elo | Y₁     | Y₂     | Y₃     | Y₄     | Y₅     |
+| --------- | ------ | ------ | ------ | ------ | ------ |
+| 0,02      | 0,8447 | 0,7486 | 0,6721 | 0,5971 | 0,5456 |
+| 0,05      | 0,7121 | 0,5395 | 0,4239 | 0,3350 | 0,2614 |
+| 0,10      | 0,5377 | 0,3260 | 0,1985 | 0,1228 | 0,0787 |
+| 0,20      | 0,2765 | 0,0982 | 0,0376 | 0,0135 | 0,0055 |
 
 ![Figura 2.2. Degradação de I(X;Yj) para diferentes intensidades de ruído.](topico2_dpi_markov/figuras/t2_passo6_ruido_intensidade.png)
 
@@ -367,18 +367,18 @@ pelos dados.
 
 **Tabela 2.3.** Informação sobre o rótulo em cada estágio.
 
-| estágio | I(rótulo; estágio) (bits) | IC 95% |
-| --- | --- | --- |
-| imagem completa | 0,8920 | [0,8846, 0,8998] |
-| representação comprimida | 0,8713 | [0,8636, 0,8795] |
-| predição final | 0,8104 | [0,7992, 0,8217] |
+| estágio                  | I(rótulo; estágio) (bits) | IC 95%           |
+| ------------------------ | ------------------------- | ---------------- |
+| imagem completa          | 0,8920                    | [0,8846, 0,8998] |
+| representação comprimida | 0,8713                    | [0,8636, 0,8795] |
+| predição final           | 0,8104                    | [0,7992, 0,8217] |
 
 **Tabela 2.4.** Queda de informação entre estágios consecutivos.
 
-| transição | queda (bits) | IC 95% da queda |
-| --- | --- | --- |
-| imagem → representação | 0,0207 | [0,0158, 0,0261] |
-| representação → predição | 0,0609 | [0,0555, 0,0672] |
+| transição                | queda (bits) | IC 95% da queda  |
+| ------------------------ | ------------ | ---------------- |
+| imagem → representação   | 0,0207       | [0,0158, 0,0261] |
+| representação → predição | 0,0609       | [0,0555, 0,0672] |
 
 O classificador por distância às médias acerta 97,09% dos rótulos (o valor
 teórico é 97,00%). Ele perde 0,0609 bit de informação sobre o rótulo e ainda
@@ -393,10 +393,10 @@ real cresce, e cresce mais rápido quanto menor a amostra por geração
 **Tabela 2.5.** Estado das trajetórias na geração 15 (40 trajetórias por linha).
 
 | N por geração | trajetórias com categoria extinta | categorias vivas (mediana) | variação total até p_real (mediana) | D(p_real‖p_ger) finita (mediana) |
-| --- | --- | --- | --- | --- |
-| 30 | 100,0% | 3 de 6 | 0,5167 | nenhuma finita |
-| 100 | 77,5% | 5 de 6 | 0,3100 | 0,2113 |
-| 300 | 17,5% | 6 de 6 | 0,1867 | 0,1895 |
+| ------------- | --------------------------------- | -------------------------- | ----------------------------------- | -------------------------------- |
+| 30            | 100,0%                            | 3 de 6                     | 0,5167                              | nenhuma finita                   |
+| 100           | 77,5%                             | 5 de 6                     | 0,3100                              | 0,2113                           |
+| 300           | 17,5%                             | 6 de 6                     | 0,1867                              | 0,1895                           |
 
 Com 30 amostras por geração, todas as 40 trajetórias perderam pelo menos uma
 categoria, e a mediana é de metade do alfabeto extinta. A divergência não tem
@@ -517,10 +517,10 @@ o bastante para que D(p‖r) supere essa margem.
 **Tabela 3.1.** Matriz p(y|x) da dica usada como informação lateral.
 
 | resultado real \\ dica | casa | empate | visitante |
-| --- | --- | --- | --- |
-| casa (p = 0,5) | 0,70 | 0,20 | 0,10 |
-| empate (p = 0,3) | 0,15 | 0,70 | 0,15 |
-| visitante (p = 0,2) | 0,10 | 0,20 | 0,70 |
+| ---------------------- | ---- | ------ | --------- |
+| casa (p = 0,5)         | 0,70 | 0,20   | 0,10      |
+| empate (p = 0,3)       | 0,15 | 0,70   | 0,15      |
+| visitante (p = 0,2)    | 0,10 | 0,20   | 0,70      |
 
 ### 3.4 Resultados
 
@@ -542,11 +542,11 @@ crescimento se comporta.
 **Tabela 3.2.** Taxa de crescimento (1/n) log₂ Sₙ após 200 rodadas, em 1000
 temporadas.
 
-| estratégia | taxa média (bits/aposta) | desvio-padrão | temporadas com log₂ S < −20 | W teórico |
-| --- | --- | --- | --- | --- |
-| tudo no favorito | −∞ | não se aplica | 100,0% | −∞ |
-| uniforme | −0,1454 | 0,0352 | 89,1% | −0,1451 |
-| Kelly | −0,0457 | 0,0049 | 0,0% | −0,0456 |
+| estratégia       | taxa média (bits/aposta) | desvio-padrão | temporadas com log₂ S < −20 | W teórico |
+| ---------------- | ------------------------ | ------------- | --------------------------- | --------- |
+| tudo no favorito | −∞                       | não se aplica | 100,0%                      | −∞        |
+| uniforme         | −0,1454                  | 0,0352        | 89,1%                       | −0,1451   |
+| Kelly            | −0,0457                  | 0,0049        | 0,0%                        | −0,0456   |
 
 "Tudo no favorito" quebra em todas as temporadas: basta um resultado diferente
 do favorito para o patrimônio zerar, e a chance de o favorito vencer 200 rodadas
@@ -577,10 +577,10 @@ confirma a previsão, e a Figura 3.2 mostra a concentração em torno de W\*.
 temporadas por valor de n).
 
 | n (rodadas) | média de (1/n) log₂ S | desvio empírico | σ/√n teórico | temporadas em W\* ± 0,02 |
-| --- | --- | --- | --- | --- |
-| 10 | −0,0459 | 0,0218 | 0,0220 | 70,8% |
-| 100 | −0,0456 | 0,0072 | 0,0070 | 99,7% |
-| 1000 | −0,0455 | 0,0022 | 0,0022 | 100,0% |
+| ----------- | --------------------- | --------------- | ------------ | ------------------------ |
+| 10          | −0,0459               | 0,0218          | 0,0220       | 70,8%                    |
+| 100         | −0,0456               | 0,0072          | 0,0070       | 99,7%                    |
+| 1000        | −0,0455               | 0,0022          | 0,0022       | 100,0%                   |
 
 ![Figura 3.2. Histogramas de (1/n) log2(patrimônio final) para n = 10, 100 e 1000.](topico3_aep_kelly/figuras/t3_passo8_aep_concentracao.png)
 
@@ -619,11 +619,11 @@ que eles não são igualmente prováveis; nenhum sorteio novo foi feito.
 
 **Tabela 3.4.** Mesmas temporadas, com cotações uniformes oᵢ = 3.
 
-| estratégia | W teórico | taxa média (bits/aposta) | temporadas com log₂ S > 20 | patrimônio mediano |
-| --- | --- | --- | --- | --- |
-| tudo no favorito | −∞ | −∞ | 0,0% | 0 |
-| uniforme | 0,0000 | 0,0000 | 0,0% | 1 |
-| Kelly | 0,0995 | 0,0997 | 51,2% | ≈ 1,2·10⁶ |
+| estratégia       | W teórico | taxa média (bits/aposta) | temporadas com log₂ S > 20 | patrimônio mediano |
+| ---------------- | --------- | ------------------------ | -------------------------- | ------------------ |
+| tudo no favorito | −∞        | −∞                       | 0,0%                       | 0                  |
+| uniforme         | 0,0000    | 0,0000                   | 0,0%                       | 1                  |
+| Kelly            | 0,0995    | 0,0997                   | 51,2%                      | ≈ 1,2·10⁶          |
 
 Com cotações uniformes, W\* = log₂ m − H(p) = 1,5850 − 1,4855 = 0,0995 bit por
 aposta, e a simulação de Kelly (0,0997) reproduz esse valor. A estratégia
@@ -740,11 +740,11 @@ observada de inversões converge para a probabilidade de erro do canal.
 
 **Tabela 4.1.** Taxa efetiva, BER pós-decodificação e piso teórico (p = 0,10).
 
-| esquema | R = k/n | BER | R > C | piso teórico da BER |
-| --- | --- | --- | --- | --- |
-| sem codificação | 1,0000 | 0,100093 | sim | 0,1000 |
-| repetição (nr = 3) | 0,3333 | 0,028023 | não | 0 |
-| Hamming(7,4) | 0,5714 | 0,066832 | sim | 0,0085 |
+| esquema            | R = k/n | BER      | R > C | piso teórico da BER |
+| ------------------ | ------- | -------- | ----- | ------------------- |
+| sem codificação    | 1,0000  | 0,100093 | sim   | 0,1000              |
+| repetição (nr = 3) | 0,3333  | 0,028023 | não   | 0                   |
+| Hamming(7,4)       | 0,5714  | 0,066832 | sim   | 0,0085              |
 
 A repetição com nr = 3 é a que mais reduz erros (BER 3,6 vezes menor que sem
 codificação), ao custo de três bits transmitidos por bit de informação. O
@@ -763,14 +763,14 @@ levada a zero.
 
 **Tabela 4.2.** BER pós-decodificação para diferentes valores de p.
 
-| p | sem codificação | repetição (nr = 3) | Hamming(7,4) | Hamming(7,4) exato |
-| --- | --- | --- | --- | --- |
-| 0,02 | 0,019980 | 0,001164 | 0,003342 | 0,003397 |
-| 0,05 | 0,050074 | 0,007234 | 0,019431 | 0,019434 |
-| 0,10 | 0,099874 | 0,027964 | 0,067010 | 0,066880 |
-| 0,15 | 0,149775 | 0,060816 | 0,129248 | 0,129026 |
-| 0,20 | 0,199982 | 0,104136 | 0,196014 | 0,196160 |
-| 0,30 | 0,299838 | 0,216050 | 0,322186 | 0,321840 |
+| p    | sem codificação | repetição (nr = 3) | Hamming(7,4) | Hamming(7,4) exato |
+| ---- | --------------- | ------------------ | ------------ | ------------------ |
+| 0,02 | 0,019980        | 0,001164           | 0,003342     | 0,003397           |
+| 0,05 | 0,050074        | 0,007234           | 0,019431     | 0,019434           |
+| 0,10 | 0,099874        | 0,027964           | 0,067010     | 0,066880           |
+| 0,15 | 0,149775        | 0,060816           | 0,129248     | 0,129026           |
+| 0,20 | 0,199982        | 0,104136           | 0,196014     | 0,196160           |
+| 0,30 | 0,299838        | 0,216050           | 0,322186     | 0,321840           |
 
 A linha p = 0,10 vem de uma nova realização do canal, por isso difere levemente
 da Tabela 4.1.
@@ -797,15 +797,15 @@ curva exata do Hamming(7,4) e o cruzamento em p = 0,2113.
 
 **Tabela 4.3.** Taxa de erro de bloco da repetição, p = 0,10 (C = 0,5310 bit).
 
-| nr | R = 1/nr | C − R | BER empírica | BER teórica (binomial) |
-| --- | --- | --- | --- | --- |
-| 3 | 0,3333 | 0,1977 | 0,027955 | 0,028000 |
-| 5 | 0,2000 | 0,3310 | 0,008569 | 0,008560 |
-| 7 | 0,1429 | 0,3881 | 0,002748 | 0,002728 |
-| 9 | 0,1111 | 0,4199 | 0,000886 | 0,000891 |
-| 11 | 0,0909 | 0,4401 | 0,000285 | 0,000296 |
-| 13 | 0,0769 | 0,4541 | 0,000107 | 0,000099 |
-| 15 | 0,0667 | 0,4643 | 0,000032 | 0,000034 |
+| nr  | R = 1/nr | C − R  | BER empírica | BER teórica (binomial) |
+| --- | -------- | ------ | ------------ | ---------------------- |
+| 3   | 0,3333   | 0,1977 | 0,027955     | 0,028000               |
+| 5   | 0,2000   | 0,3310 | 0,008569     | 0,008560               |
+| 7   | 0,1429   | 0,3881 | 0,002748     | 0,002728               |
+| 9   | 0,1111   | 0,4199 | 0,000886     | 0,000891               |
+| 11  | 0,0909   | 0,4401 | 0,000285     | 0,000296               |
+| 13  | 0,0769   | 0,4541 | 0,000107     | 0,000099               |
+| 15  | 0,0667   | 0,4643 | 0,000032     | 0,000034               |
 
 A taxa de erro cai de forma aproximadamente exponencial com nr (cerca de uma
 ordem de grandeza a cada aumento de 4) e coincide com a cauda binomial em todas
@@ -830,11 +830,11 @@ empírica e pela cauda binomial.
 **Tabela 4.4.** Os três esquemas num canal muito ruidoso (p = 0,40,
 C = 0,0290 bit).
 
-| esquema | R | BER | R > C | BER aceitável (< 0,01) | piso teórico da BER |
-| --- | --- | --- | --- | --- | --- |
-| sem codificação | 1,0000 | 0,400243 | sim | não | 0,4000 |
-| repetição (nr = 3) | 0,3333 | 0,352111 | sim | não | 0,3280 |
-| Hamming(7,4) | 0,5714 | 0,420998 | sim | não | 0,3681 |
+| esquema            | R      | BER      | R > C | BER aceitável (< 0,01) | piso teórico da BER |
+| ------------------ | ------ | -------- | ----- | ---------------------- | ------------------- |
+| sem codificação    | 1,0000 | 0,400243 | sim   | não                    | 0,4000              |
+| repetição (nr = 3) | 0,3333 | 0,352111 | sim   | não                    | 0,3280              |
+| Hamming(7,4)       | 0,5714 | 0,420998 | sim   | não                    | 0,3681              |
 
 Com C = 0,0290 bit, bem abaixo da taxa de qualquer um dos três esquemas, nenhum
 chega perto de uma BER aceitável: mesmo a repetição erra 35% dos bits. O
@@ -858,18 +858,18 @@ imagem (com BER da ordem de 1%, ainda são cerca de mil erros por ponto).
 **Tabela 4.5.** Repetição no canal com p = 0,40 (C = 0,0290 bit), para nr
 crescente.
 
-| nr | R = 1/nr | R > C | BER empírica | BER teórica (binomial) | piso teórico |
-| --- | --- | --- | --- | --- | --- |
-| 3 | 0,3333 | sim | 0,3515 | 0,3520 | 0,3280 |
-| 9 | 0,1111 | sim | 0,2677 | 0,2666 | 0,2085 |
-| 19 | 0,0526 | sim | 0,1854 | 0,1861 | 0,0935 |
-| 33 | 0,0303 | sim | 0,1223 | 0,1211 | 0,0045 |
-| 35 | 0,0286 | não | 0,1137 | 0,1143 | 0 |
-| 51 | 0,0196 | não | 0,0730 | 0,0735 | 0 |
-| 75 | 0,0133 | não | 0,0399 | 0,0396 | 0 |
-| 101 | 0,0099 | não | 0,0206 | 0,0209 | 0 |
-| 133 | 0,0075 | não | 0,0097 | 0,0098 | 0 |
-| 151 | 0,0066 | não | 0,0065 | 0,0064 | 0 |
+| nr  | R = 1/nr | R > C | BER empírica | BER teórica (binomial) | piso teórico |
+| --- | -------- | ----- | ------------ | ---------------------- | ------------ |
+| 3   | 0,3333   | sim   | 0,3515       | 0,3520                 | 0,3280       |
+| 9   | 0,1111   | sim   | 0,2677       | 0,2666                 | 0,2085       |
+| 19  | 0,0526   | sim   | 0,1854       | 0,1861                 | 0,0935       |
+| 33  | 0,0303   | sim   | 0,1223       | 0,1211                 | 0,0045       |
+| 35  | 0,0286   | não   | 0,1137       | 0,1143                 | 0            |
+| 51  | 0,0196   | não   | 0,0730       | 0,0735                 | 0            |
+| 75  | 0,0133   | não   | 0,0399       | 0,0396                 | 0            |
+| 101 | 0,0099   | não   | 0,0206       | 0,0209                 | 0            |
+| 133 | 0,0075   | não   | 0,0097       | 0,0098                 | 0            |
+| 151 | 0,0066   | não   | 0,0065       | 0,0064                 | 0            |
 
 A BER cai com nr mesmo enquanto R está acima de C: com nr = 33, o último valor
 ímpar com R > C, ela já é 0,122, contra 0,352 com nr = 3. O teorema não proíbe
