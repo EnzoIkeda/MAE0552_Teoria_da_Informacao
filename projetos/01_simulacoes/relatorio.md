@@ -6,6 +6,8 @@ Universidade de São Paulo, Instituto de Matemática e Estatística
 
 São Paulo, outubro de 2026
 
+Repositório: <https://github.com/EnzoIkeda/MAE0552_Teoria_da_Informacao>
+
 **Integrantes do grupo**
 
 - Yasmim da Silva Sobrinho, 13687630
