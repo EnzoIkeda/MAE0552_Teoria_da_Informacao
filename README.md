@@ -136,6 +136,11 @@ Instalação em **Para começar a trabalhar**.
         ├── topico2_dpi_markov/
         ├── topico3_aep_kelly/
         └── topico4_canal_codigos/
+    └── 02_projeto_final/      # projeto final: incerteza de partidas de LoL em bits
+        ├── main.py            #   roda as Partes 1 a 7 (precisa dos CSVs do Oracle's Elixir)
+        ├── parteN_*.py        #   uma análise por parte
+        ├── resultados/        #   tabelas .csv e figuras .png geradas
+        └── relatorio/         #   gerar_relatorio.py e o PDF do relatório
 ```
 
 Cada tópico (ou entrega) tem sempre a mesma forma:

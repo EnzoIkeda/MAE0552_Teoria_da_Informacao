@@ -11,6 +11,8 @@ repos:
       - id: check-merge-conflict
       - id: check-added-large-files
         args: ["--maxkb=2048"]
+        # relatorio em PDF e tabela de pares do projeto final passam de 2 MB
+        exclude: ^projetos/02_projeto_final/(relatorio/.*\.pdf|resultados/parte4_pares\.csv)$
       # Recusa commits feitos diretamente na main -- todo trabalho vai por
       # branch + Pull Request. Contorno de emergencia: git commit --no-verify.
       - id: no-commit-to-branch
